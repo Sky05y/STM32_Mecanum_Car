@@ -3,12 +3,12 @@
         {
             "name": "Car",
             "includePath": [
-                "d:\\Code\\MCU\\STM32\\麦轮车\\USER",
-                "d:\\Code\\MCU\\STM32\\麦轮车\\CORE",
-                "d:\\Code\\MCU\\STM32\\麦轮车\\STM32F10x_FWLib\\inc",
+                "d:\\Code\\MCU\\STM32\\Mecanum_Car\\USER",
+                "d:\\Code\\MCU\\STM32\\Mecanum_Car\\CORE",
+                "d:\\Code\\MCU\\STM32\\Mecanum_Car\\STM32F10x_FWLib\\inc",
                 "D:\\Keil_v5\\ARM\\ARMCC\\include",
                 "D:\\Keil_v5\\ARM\\ARMCC\\include\\rw",
-                "d:\\Code\\MCU\\STM32\\麦轮车\\STM32F10x_FWLib\\src"
+                "d:\\Code\\MCU\\STM32\\Mecanum_Car\\STM32F10x_FWLib\\src"
             ],
             "defines": [
                 "STM32F10X_MD",
