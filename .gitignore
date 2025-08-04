@@ -1,0 +1,16 @@
+# Keil 生成文件
+/OBJ/
+/Listings/
+/Objects/
+*.uvguix.*
+*.axf
+*.map
+*.dep
+*.d
+*.crf
+*.o
+*.lst
+
+# 其他忽略项
+.DS_Store
+*.bak
