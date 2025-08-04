@@ -49,17 +49,19 @@ int Map(int val,int in_min,int in_max,int out_min,int out_max)
 ***************************************************/
 void Bluetooth_Mode(void)
 {
-	if(mode_flag==1)
-	{
-		APP_Joy_Mode();//APPҡ��ģʽ
-	}
-	else if(mode_flag==2)APP_Gravity_Mode();//APP����ģʽ
-	else if(mode_flag==3)Evadible_Mode();
-	else if(mode_flag==4)Follow_Mode();
-	else if(mode_flag==5)RGB_mode=0;//������
-	else if(mode_flag==6)RGB_mode=1;//��ˮ��
-	else if(mode_flag==7)RGB_mode=2;//��˸��
-	else Motion_State(ON);
+	// if(mode_flag==1)
+	// {
+	// 	APP_Joy_Mode();//APPҡ��ģʽ
+	// }
+	// else if(mode_flag==2)APP_Gravity_Mode();//APP����ģʽ
+	// else if(mode_flag==3)Evadible_Mode();
+	// else if(mode_flag==4)Follow_Mode();
+	// else if(mode_flag==5)RGB_mode=0;//������
+	// else if(mode_flag==6)RGB_mode=1;//��ˮ��
+	// else if(mode_flag==7)RGB_mode=2;//��˸��
+	// else Motion_State(ON);
+	
+	APP_Joy_Mode();
 }
 
 /**************************************************
@@ -426,6 +428,10 @@ void Follow_Mode(void)
 	}
 	else Motion_State(ON);
 }
+void my_Mode(void)
+{
+	Bluetooth_Mode();
+}
 
 /**************************************************
 �������ƣ�void RGB_Select(void)
@@ -508,6 +514,24 @@ void RGB_Show(void)
 		delay_ms(100);
 	}
 }
+void set_motor(int pwm, GPIO_TypeDef* IN1_Port, uint16_t IN1_Pin, GPIO_TypeDef* IN2_Port, uint16_t IN2_Pin)
+{
+    if (pwm > 20)  // 前进
+    {
+        GPIO_SetBits(IN1_Port, IN1_Pin);
+        GPIO_ResetBits(IN2_Port, IN2_Pin);
+    }
+    else if (pwm < -20)  // 后退
+    {
+        GPIO_ResetBits(IN1_Port, IN1_Pin);
+        GPIO_SetBits(IN2_Port, IN2_Pin);
+    }
+    else  // 停止
+    {
+        GPIO_ResetBits(IN1_Port, IN1_Pin);
+        GPIO_ResetBits(IN2_Port, IN2_Pin);
+    }
+}
 
 /**************************************************
 �������ƣ�Joy_Mode(void)
@@ -548,8 +572,15 @@ void APP_Joy_Mode(void)
 	pwm2 = Map(pwm2, -127, 127, -499, 499);
 	pwm3 = Map(pwm3, -127, 127, -499, 499);
 	pwm4 = Map(pwm4, -127, 127, -499, 499);
-
-
+	
+	printf("Lx=%d, Ly=%d, Rx=%d, Ry=%d\n", Joy_Lx, Joy_Ly, Joy_Rx, Joy_Ry);
+	printf("Map_Lx=%d, Map_Ly=%d, Map_Rx=%d, Map_Ry=%d\n", Map_Lx, Map_Ly, Map_Rx, Map_Ry);
+	// if(!pwm1 && !pwm2 && !pwm3 && !pwm4)
+	// {
+	// 	Motion_State(6);//关闭电机驱动失能
+	// 	return;
+	// }
+	printf("pwm1=%d, pwm2=%d, pwm3=%d, pwm4=%d\n", pwm1, pwm2, pwm3, pwm4);
 	if (pwm1 < 20 && pwm1 >-20)pwm1 = 0;
 	if (pwm2 < 20 && pwm2 >-20)pwm2 = 0;
 	if (pwm3 < 20 && pwm3 >-20)pwm3 = 0;
@@ -566,54 +597,11 @@ void APP_Joy_Mode(void)
 	if (pwm4 < -499)pwm4 = -499;
 	
 	
-	if(pwm1>=0)
-	{
-		TIM_SetCompare4(TIM2,500-pwm1);//L_BIN2:������
-		L_BIN2_ON;
-				
-	}
-	else if(pwm1<0)
-	{
-		pwm1=abs(pwm1);
-		TIM_SetCompare4(TIM2,pwm1);//L_BIN2:������
-		L_BIN2_OFF;	
-	}
-	
-	if(pwm2>=0)
-	{
-		TIM_SetCompare3(TIM2,pwm2);//L_AIN2:������
-		L_AIN2_OFF;
-	}
-	else if(pwm2<0)
-	{
-		pwm2=abs(pwm2);
-		TIM_SetCompare3(TIM2,500-pwm2);//L_AIN2:������
-		L_AIN2_ON;
-	}
-			
-	if(pwm3>=0)
-	{
-		TIM_SetCompare1(TIM2,500-pwm3);//R_AIN2:������
-		R_AIN2_ON;
-	}
-	else if(pwm3<0)
-	{
-		pwm3=abs(pwm3);
-		TIM_SetCompare1(TIM2,pwm3);//R_AIN2:������
-		R_AIN2_OFF;
-	}
-			
-	if(pwm4>=0)
-	{
-		TIM_SetCompare2(TIM2,pwm4);//R_BIN2:������
-		R_BIN2_OFF;
-	}
-	else if(pwm4<0)
-	{
-		pwm4=abs(pwm4);
-		TIM_SetCompare2(TIM2,500-pwm4);//R_BIN2:������
-		R_BIN2_ON;
-	}
+	// 
+    set_motor(pwm1, GPIOA, GPIO_Pin_0, GPIOB, GPIO_Pin_5); // 电机1：A1 B1
+    set_motor(pwm2, GPIOA, GPIO_Pin_1, GPIOB, GPIO_Pin_6); // 电机2：A2 B2
+    set_motor(pwm3, GPIOA, GPIO_Pin_2, GPIOB, GPIO_Pin_7); // 电机3：A3 B3
+    set_motor(pwm4, GPIOA, GPIO_Pin_3, GPIOB, GPIO_Pin_8); // 电机4：A4 B4
 	delay_ms(10);
 //	printf(Lx_Buf);
 //	printf(Rx_Buf);

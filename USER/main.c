@@ -34,5 +34,31 @@ DI:PB0
 ************************************************************************************/
 
 #include "stdio.h"
-int main(void) { while(1); }
+#include "delay.h"
+#include "usart.h"
+#include "control.h"
+
+int main(void)
+{ 
+    delay_init();           //延时函数初始化
+    NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
+    LED_Init();             // LED初始化
+    USART1_Init(9600);	    //蓝牙串口初始化为9600
+    printf("串口初始化完成！\r\n");
+	// NRF24L01_Init();           //2.4G收发模块
+  	// NRF24L01_Check_detection();//NRF24L01等待应答    
+    Motor_Init();//电机初始化
+    printf("电机初始化完成！\r\n");
+    // Hcsr04_Init();//超声波初始化
+    Motion_State(OFF);//关闭电机驱动失能
+    printf("电机驱动初始化完成！\r\n");
+    // RGB_LED_Init();//RGB彩灯初始化
+    delay_ms(1000);
+    while(1)
+    {
+        my_Mode();
+    }
+
+
+}
 

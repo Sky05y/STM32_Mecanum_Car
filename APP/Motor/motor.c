@@ -59,14 +59,27 @@ void Motor_GPIO_Init(void)
 {
 	GPIO_InitTypeDef	GPIO_InitStruct;
 
-	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB,ENABLE);
+	// RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB,ENABLE);
+	// GPIO_InitStruct.GPIO_Pin = GPIO_Pin_5|GPIO_Pin_6|GPIO_Pin_7|GPIO_Pin_8;
+	// GPIO_InitStruct.GPIO_Mode = GPIO_Mode_Out_PP;//推挽输出
+	// GPIO_InitStruct.GPIO_Speed = GPIO_Speed_50MHz;
 	
-	GPIO_InitStruct.GPIO_Pin = GPIO_Pin_5|GPIO_Pin_6|GPIO_Pin_7|GPIO_Pin_8;
-	GPIO_InitStruct.GPIO_Mode = GPIO_Mode_Out_PP;//推挽输出
-	GPIO_InitStruct.GPIO_Speed = GPIO_Speed_50MHz;
+	// GPIO_Init(GPIOB,&GPIO_InitStruct);
 	
-	GPIO_Init(GPIOB,&GPIO_InitStruct);
-	
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA | RCC_APB2Periph_GPIOB, ENABLE);
+    // 初始化 GPIOA 的 PA0~PA3
+    GPIO_InitStruct.GPIO_Pin = GPIO_Pin_0 | GPIO_Pin_1 | GPIO_Pin_2 | GPIO_Pin_3;
+    GPIO_InitStruct.GPIO_Mode = GPIO_Mode_Out_PP; // 推挽输出
+    GPIO_InitStruct.GPIO_Speed = GPIO_Speed_50MHz;
+    GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+    // 初始化 GPIOB 的 PB5~PB8
+    GPIO_InitStruct.GPIO_Pin = GPIO_Pin_5 | GPIO_Pin_6 | GPIO_Pin_7 | GPIO_Pin_8;
+    GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+    // 默认先关闭所有电机输出（防止上电乱转）
+    GPIO_ResetBits(GPIOA, GPIO_Pin_0 | GPIO_Pin_1 | GPIO_Pin_2 | GPIO_Pin_3);
+    GPIO_ResetBits(GPIOB, GPIO_Pin_5 | GPIO_Pin_6 | GPIO_Pin_7 | GPIO_Pin_8);
 }
 
 
@@ -100,9 +113,9 @@ void STBY_Init(void)
 ***************************************************/
 void Motor_Init(void)
 {
-	Motor_PWM_Init(500,72);
+	// Motor_PWM_Init(500,72);
 	Motor_GPIO_Init();
-	STBY_Init();
+	// STBY_Init();
 }
 
 

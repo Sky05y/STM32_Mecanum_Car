@@ -35,7 +35,7 @@
 
 
 extern u8 flag;
-extern float RGB_R,RGB_G,RGB_B;//HSV转RGB的颜色
+extern float RGB_R,RGB_G,RGB_B;//HSV转RGB锟斤拷锟斤拷色
 extern char Pitch_Roll_Buf[20];
 
 
@@ -51,7 +51,7 @@ void Follow_Mode(void);
 void RGB_Select(void);
 void RGB_Show(void);
 void Control(void);
-
+void my_Mode(void);
 		 				    
 #endif
 
