@@ -514,24 +514,70 @@ void RGB_Show(void)
 		delay_ms(100);
 	}
 }
-void set_motor(int pwm, GPIO_TypeDef* IN1_Port, uint16_t IN1_Pin, GPIO_TypeDef* IN2_Port, uint16_t IN2_Pin)
+void set_motor(int8_t motor, int16_t speed)
 {
-    if (pwm > 20)  // 前进
+    if (speed > 1000) speed = 1000;
+    if (speed < -1000) speed = -1000;
+	printf("set_motor(%d, %d)\n", motor, speed);
+    uint16_t duty = (speed > 0) ? speed : -speed;  // 取绝对值
+
+    switch (motor)
     {
-        GPIO_SetBits(IN1_Port, IN1_Pin);
-        GPIO_ResetBits(IN2_Port, IN2_Pin);
-    }
-    else if (pwm < -20)  // 后退
-    {
-        GPIO_ResetBits(IN1_Port, IN1_Pin);
-        GPIO_SetBits(IN2_Port, IN2_Pin);
-    }
-    else  // 停止
-    {
-        GPIO_ResetBits(IN1_Port, IN1_Pin);
-        GPIO_ResetBits(IN2_Port, IN2_Pin);
+        case 1: // 电机1
+            if (speed > 0) {
+				printf("%d",duty);
+                TIM_SetCompare1(TIM2, duty);   // 前进
+                TIM_SetCompare2(TIM2, 0);
+            } else if (speed < 0) {
+                TIM_SetCompare1(TIM2, 0);
+                TIM_SetCompare2(TIM2, duty);   // 后退
+            } else {
+                TIM_SetCompare1(TIM2, 0);
+                TIM_SetCompare2(TIM2, 0);      // 停止
+            }
+            break;
+
+        case 2: // 电机2
+            if (speed > 0) {
+                TIM_SetCompare3(TIM2, duty);
+                TIM_SetCompare4(TIM2, 0);
+            } else if (speed < 0) {
+                TIM_SetCompare3(TIM2, 0);
+                TIM_SetCompare4(TIM2, duty);
+            } else {
+                TIM_SetCompare3(TIM2, 0);
+                TIM_SetCompare4(TIM2, 0);
+            }
+            break;
+
+        case 3: // 电机3
+            if (speed > 0) {
+                TIM_SetCompare1(TIM3, duty);
+                TIM_SetCompare2(TIM3, 0);
+            } else if (speed < 0) {
+                TIM_SetCompare1(TIM3, 0);
+                TIM_SetCompare2(TIM3, duty);
+            } else {
+                TIM_SetCompare1(TIM3, 0);
+                TIM_SetCompare2(TIM3, 0);
+            }
+            break;
+
+        case 4: // 电机4
+            if (speed > 0) {
+                TIM_SetCompare3(TIM3, duty);
+                TIM_SetCompare4(TIM3, 0);
+            } else if (speed < 0) {
+                TIM_SetCompare3(TIM3, 0);
+                TIM_SetCompare4(TIM3, duty);
+            } else {
+                TIM_SetCompare3(TIM3, 0);
+                TIM_SetCompare4(TIM3, 0);
+            }
+            break;
     }
 }
+
 
 /**************************************************
 �������ƣ�Joy_Mode(void)
@@ -561,12 +607,22 @@ void APP_Joy_Mode(void)
 	Map_Rx = Map(Joy_Rx, 10, 90, -127, 127);
 	Map_Ry = Map(Joy_Ry, 10, 90, -127, 127);
 
-	
-	pwm1 = -Map_Ly + Map_Lx - Map_Ry + Map_Rx;
-	pwm2 = -Map_Ly - Map_Lx - Map_Ry - Map_Rx;
+	// 电机1 左下 → pwm1
+	// 电机2 右下 → pwm2
+	// 电机3 左上 → pwm3
+	// 电机4 右上 → pwm4
+	// pwm1 = -Map_Ly + Map_Lx - Map_Ry + Map_Rx;
+	// pwm2 = -Map_Ly - Map_Lx - Map_Ry - Map_Rx;
+	pwm1 = Map_Ly;
+	pwm2 = Map_Ly;
 	pwm3 = -Map_Ly + Map_Lx - Map_Ry - Map_Rx;
 	pwm4 = -Map_Ly - Map_Lx - Map_Ry + Map_Rx;
-
+	// Map_Lx = -20;
+	// Map_Ly = 20;
+	// pwm1 = Map_Lx;
+	// pwm2 = Map_Lx;
+	// pwm3 = Map_Ly;
+	// pwm4 = Map_Ly;
 
 	pwm1 = Map(pwm1, -127, 127, -499, 499);
 	pwm2 = Map(pwm2, -127, 127, -499, 499);
@@ -596,12 +652,14 @@ void APP_Joy_Mode(void)
 	if (pwm3 < -499)pwm3 = -499;
 	if (pwm4 < -499)pwm4 = -499;
 	
-	
+
 	// 
-    set_motor(pwm1, GPIOA, GPIO_Pin_0, GPIOB, GPIO_Pin_5); // 电机1：A1 B1
-    set_motor(pwm2, GPIOA, GPIO_Pin_1, GPIOB, GPIO_Pin_6); // 电机2：A2 B2
-    set_motor(pwm3, GPIOA, GPIO_Pin_2, GPIOB, GPIO_Pin_7); // 电机3：A3 B3
-    set_motor(pwm4, GPIOA, GPIO_Pin_3, GPIOB, GPIO_Pin_8); // 电机4：A4 B4
+	// set_motor(pwm1, GPIOA, GPIO_Pin_0, GPIOB, GPIO_Pin_5, TIM3, 1); // 电机1: PWM = TIM3_CH1
+	// set_motor(pwm2, GPIOA, GPIO_Pin_1, GPIOB, GPIO_Pin_6, TIM3, 2); // 电机2: PWM = TIM3_CH2
+    // set_motor(pwm3, GPIOA, GPIO_Pin_2, GPIOB, GPIO_Pin_7); // 电机3：A3 B3
+    // set_motor(pwm4, GPIOA, GPIO_Pin_3, GPIOB, GPIO_Pin_8); // 电机4：A4 B4
+	TIM4->CCR2=500;
+	TIM4->CCR4=800;
 	delay_ms(10);
 //	printf(Lx_Buf);
 //	printf(Rx_Buf);
