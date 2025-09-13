@@ -514,69 +514,70 @@ void RGB_Show(void)
 		delay_ms(100);
 	}
 }
-void set_motor(int8_t motor, int16_t speed)
+void set_motor(uint8_t motor_id, int16_t speed)
 {
-    if (speed > 1000) speed = 1000;
-    if (speed < -1000) speed = -1000;
-	printf("set_motor(%d, %d)\n", motor, speed);
-    uint16_t duty = (speed > 0) ? speed : -speed;  // 取绝对值
+    uint16_t pwm = (speed >= 0) ? speed : -speed;  // 绝对值作为 PWM 占空比
+    if (pwm > 1000) pwm = 1000;  // 限制最大值
 
-    switch (motor)
+    switch (motor_id)
     {
-        case 1: // 电机1
-            if (speed > 0) {
-				printf("%d",duty);
-                TIM_SetCompare1(TIM2, duty);   // 前进
-                TIM_SetCompare2(TIM2, 0);
-            } else if (speed < 0) {
-                TIM_SetCompare1(TIM2, 0);
-                TIM_SetCompare2(TIM2, duty);   // 后退
-            } else {
-                TIM_SetCompare1(TIM2, 0);
-                TIM_SetCompare2(TIM2, 0);      // 停止
-            }
+        case 1: // 电机1: PWM → TIM4_CH1(PB6), DIR → PB8
+            if (speed >= 0)
+			{
+                TIM4->CCR1 = speed;   // IN1 → PWM
+				TIM4->CCR2 = 0;       // IN2 → 低电平
+			}
+            else
+			{
+				TIM4->CCR1 = 0;       // IN1 → 低电平
+				TIM4->CCR2 = -speed;   // IN2 → PWM
+			}
             break;
 
-        case 2: // 电机2
-            if (speed > 0) {
-                TIM_SetCompare3(TIM2, duty);
-                TIM_SetCompare4(TIM2, 0);
-            } else if (speed < 0) {
-                TIM_SetCompare3(TIM2, 0);
-                TIM_SetCompare4(TIM2, duty);
-            } else {
-                TIM_SetCompare3(TIM2, 0);
-                TIM_SetCompare4(TIM2, 0);
-            }
-            break;
+        case 2: // 电机2: IN1 → TIM4_CH2(PB7), IN2 → TIM4_CH3(PB8)
+			if (speed >= 0)
+			{
+				TIM4->CCR2 = speed;  // IN1 → PWM
+				TIM4->CCR3 = 0;      // IN2 → 低电平
+			}
+			else
+			{
+				TIM4->CCR2 = 0;      // IN1 → 低电平
+				TIM4->CCR3 = -speed; // IN2 → PWM
+			}
+			break;
 
-        case 3: // 电机3
-            if (speed > 0) {
-                TIM_SetCompare1(TIM3, duty);
-                TIM_SetCompare2(TIM3, 0);
-            } else if (speed < 0) {
-                TIM_SetCompare1(TIM3, 0);
-                TIM_SetCompare2(TIM3, duty);
-            } else {
-                TIM_SetCompare1(TIM3, 0);
-                TIM_SetCompare2(TIM3, 0);
-            }
-            break;
+		case 3: // 电机3: IN1 → TIM3_CH1(PA6), IN2 → TIM3_CH3(PB0)
+			if (speed >= 0)
+			{
+				TIM3->CCR1 = speed;  // IN1 → PWM
+				TIM3->CCR3 = 0;      // IN2 → 低电平
+			}
+			else
+			{
+				TIM3->CCR1 = 0;      // IN1 → 低电平
+				TIM3->CCR3 = -speed; // IN2 → PWM
+			}
+			break;
 
-        case 4: // 电机4
-            if (speed > 0) {
-                TIM_SetCompare3(TIM3, duty);
-                TIM_SetCompare4(TIM3, 0);
-            } else if (speed < 0) {
-                TIM_SetCompare3(TIM3, 0);
-                TIM_SetCompare4(TIM3, duty);
-            } else {
-                TIM_SetCompare3(TIM3, 0);
-                TIM_SetCompare4(TIM3, 0);
-            }
+		case 4: // 电机4: IN1 → TIM3_CH2(PA7), IN2 → TIM3_CH4(PB1)
+			if (speed >= 0)
+			{
+				TIM3->CCR2 = speed;  // IN1 → PWM
+				TIM3->CCR4 = 0;      // IN2 → 低电平
+			}
+			else
+			{
+				TIM3->CCR2 = 0;      // IN1 → 低电平
+				TIM3->CCR4 = -speed; // IN2 → PWM
+			}
+			break;
+
+        default:
             break;
     }
 }
+
 
 
 /**************************************************
@@ -629,14 +630,14 @@ void APP_Joy_Mode(void)
 	pwm3 = Map(pwm3, -127, 127, -499, 499);
 	pwm4 = Map(pwm4, -127, 127, -499, 499);
 	
-	printf("Lx=%d, Ly=%d, Rx=%d, Ry=%d\n", Joy_Lx, Joy_Ly, Joy_Rx, Joy_Ry);
-	printf("Map_Lx=%d, Map_Ly=%d, Map_Rx=%d, Map_Ry=%d\n", Map_Lx, Map_Ly, Map_Rx, Map_Ry);
+	// printf("Lx=%d, Ly=%d, Rx=%d, Ry=%d\n", Joy_Lx, Joy_Ly, Joy_Rx, Joy_Ry);
+	// printf("Map_Lx=%d, Map_Ly=%d, Map_Rx=%d, Map_Ry=%d\n", Map_Lx, Map_Ly, Map_Rx, Map_Ry);
 	// if(!pwm1 && !pwm2 && !pwm3 && !pwm4)
 	// {
 	// 	Motion_State(6);//关闭电机驱动失能
 	// 	return;
 	// }
-	printf("pwm1=%d, pwm2=%d, pwm3=%d, pwm4=%d\n", pwm1, pwm2, pwm3, pwm4);
+	// printf("pwm1=%d, pwm2=%d, pwm3=%d, pwm4=%d\n", pwm1, pwm2, pwm3, pwm4);
 	if (pwm1 < 20 && pwm1 >-20)pwm1 = 0;
 	if (pwm2 < 20 && pwm2 >-20)pwm2 = 0;
 	if (pwm3 < 20 && pwm3 >-20)pwm3 = 0;
@@ -658,8 +659,14 @@ void APP_Joy_Mode(void)
 	// set_motor(pwm2, GPIOA, GPIO_Pin_1, GPIOB, GPIO_Pin_6, TIM3, 2); // 电机2: PWM = TIM3_CH2
     // set_motor(pwm3, GPIOA, GPIO_Pin_2, GPIOB, GPIO_Pin_7); // 电机3：A3 B3
     // set_motor(pwm4, GPIOA, GPIO_Pin_3, GPIOB, GPIO_Pin_8); // 电机4：A4 B4
-	TIM4->CCR2=500;
-	TIM4->CCR4=800;
+	// set_motor(pwm1, 400);
+	// set_motor(pwm2, 400);
+	// set_motor(pwm3, -400);
+	// set_motor(pwm4, -400);
+    // TIM4->CCR1 = 250;   // PB6 → 电机1_A
+    // TIM4->CCR2 = 250;   // PB7 → 电机1_B
+    // TIM3->CCR1 = 250;   // PA6 → 电机2_A
+    // TIM3->CCR2 = 250;   // PA7 → 电机2_B
 	delay_ms(10);
 //	printf(Lx_Buf);
 //	printf(Rx_Buf);

@@ -31,3 +31,4 @@
 ..\obj\motor.o: ..\STM32F10x_FWLib\inc\stm32f10x_wwdg.h
 ..\obj\motor.o: ..\STM32F10x_FWLib\inc\misc.h
 ..\obj\motor.o: ..\SYSTEM\delay\delay.h
+..\obj\motor.o: ..\HARDWARE\PWM\pwm.h

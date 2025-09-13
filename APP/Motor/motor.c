@@ -1,5 +1,5 @@
 #include "motor.h"
-
+#include "pwm.h"
 
 /**************************************************
 函数名称：Motor_PWM_Init(u32 arr,u32 psc)
@@ -172,34 +172,58 @@ void STBY_Init(void)
 
 void mach_config(void)
 {
-	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB,ENABLE);//开时钟
-	GPIO_InitTypeDef GPIO_INIT; // 定义 GPIO 初始化结构体
-	
-	GPIO_INIT.GPIO_Mode = GPIO_Mode_AF_PP; // 设置 GPIO 为复用推挽输出模式（PWM 必须用这个模式）
-	GPIO_INIT.GPIO_Speed = GPIO_Speed_50MHz; // 设置 IO 口输出速度 50MHz
-	GPIO_INIT.GPIO_Pin = GPIO_Pin_9; // 选择 PB9（TIM4_CH4 输出口）
-	GPIO_Init(GPIOB,&GPIO_INIT); // 初始化 PB9，用于 PWM 输出
+    GPIO_InitTypeDef GPIO_INIT;
+    TIM_TimeBaseInitTypeDef TIM_INIT;
+    TIM_OCInitTypeDef TIM_OCINIT;
 
-	GPIO_INIT.GPIO_Mode = GPIO_Mode_Out_PP; // 设置 GPIO 为推挽输出（普通数字输出）
-	GPIO_INIT.GPIO_Speed = GPIO_Speed_50MHz; // 设置 IO 口速度 50MHz
-	GPIO_INIT.GPIO_Pin = GPIO_Pin_8; // 选择 PB8 作为方向控制脚
-	GPIO_Init(GPIOB,&GPIO_INIT); // 初始化 PB8
-	 
-	RCC->APB1ENR |=(0X01<<2);//开TIM4时钟
-	//定时器4通道 9 CH4
-	//时钟组成
-	TIM4->PSC = 72; // 设置预分频器，使定时器时钟 = 72MHz / (72+1) ≈ 1MHz
-	TIM4->ARR = 1000; // 设置自动重装值，PWM 周期 = 1000 个计数 = 1kHz
-	TIM4->CNT = 0;	 // 清零计数器，计数从 0 开始
-		TIM4->CR1 &=~(0X01<<4);//计数方向--向上记数
-		//配置PWM波 有效电平 PWM模式  输出到响应引脚
-		TIM4->CCER &=~(0X01<<13);//高电平有效
-		TIM4->CCMR2 |=(0X06<<12);//PWM模式1 PWM输出模式
-		TIM4->CCER |=(0X01<<12);//OC4对应到PB9，将输出信号配置到指定管脚
-		TIM4->CCR4=0;//比较值
-		TIM4->CR1 |=(0X01<<0);//计数器使能
-	GPIO_ResetBits(GPIOB,GPIO_Pin_8);//拉低PB8
+    // 使能 GPIO 和 TIM 时钟
+    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA | RCC_APB2Periph_GPIOB, ENABLE);
+    RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM3 | RCC_APB1Periph_TIM4, ENABLE);
 
+    // ----------------- GPIO 配置 -----------------
+    // TIM4_CH1~4 → PB6,7,8,9
+    GPIO_INIT.GPIO_Mode  = GPIO_Mode_AF_PP;
+    GPIO_INIT.GPIO_Speed = GPIO_Speed_50MHz;
+    GPIO_INIT.GPIO_Pin   = GPIO_Pin_6 | GPIO_Pin_7 | GPIO_Pin_8 | GPIO_Pin_9;
+    GPIO_Init(GPIOB, &GPIO_INIT);
+
+    // TIM3_CH1~4 → PA6,7 + PB0,1
+    GPIO_INIT.GPIO_Pin   = GPIO_Pin_6 | GPIO_Pin_7;
+    GPIO_Init(GPIOA, &GPIO_INIT);
+
+    GPIO_INIT.GPIO_Pin   = GPIO_Pin_0 | GPIO_Pin_1;
+    GPIO_Init(GPIOB, &GPIO_INIT);
+
+    // ----------------- TIM4 配置 -----------------
+    TIM_INIT.TIM_Period = 999;               // 自动重装值 → PWM频率
+    TIM_INIT.TIM_Prescaler = 71;             // 72MHz / (71+1) = 1MHz
+    TIM_INIT.TIM_ClockDivision = TIM_CKD_DIV1;
+    TIM_INIT.TIM_CounterMode = TIM_CounterMode_Up;
+    TIM_TimeBaseInit(TIM4, &TIM_INIT);
+
+    // ----------------- TIM3 配置 -----------------
+    TIM_TimeBaseInit(TIM3, &TIM_INIT);
+
+    // ----------------- PWM 输出配置 -----------------
+    TIM_OCINIT.TIM_OCMode = TIM_OCMode_PWM1;
+    TIM_OCINIT.TIM_OutputState = TIM_OutputState_Enable;
+    TIM_OCINIT.TIM_OCPolarity = TIM_OCPolarity_High;
+
+    // TIM4: CH1~CH4
+    TIM_OC1Init(TIM4, &TIM_OCINIT);
+    TIM_OC2Init(TIM4, &TIM_OCINIT);
+    TIM_OC3Init(TIM4, &TIM_OCINIT);
+    TIM_OC4Init(TIM4, &TIM_OCINIT);
+
+    // TIM3: CH1~CH4
+    TIM_OC1Init(TIM3, &TIM_OCINIT);
+    TIM_OC2Init(TIM3, &TIM_OCINIT);
+    TIM_OC3Init(TIM3, &TIM_OCINIT);
+    TIM_OC4Init(TIM3, &TIM_OCINIT);
+
+    // 使能定时器
+    TIM_Cmd(TIM4, ENABLE);
+    TIM_Cmd(TIM3, ENABLE);
 }
 void Motor_Init(void)
 {
@@ -207,7 +231,17 @@ void Motor_Init(void)
 	// Motor_GPIO_Init();
 	// Motor_TIM_Init();
 	// STBY_Init();
-	mach_config();
+
+	// mach_config();
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE);
+
+	GPIO_InitTypeDef GPIO_InitStructure;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_4 | GPIO_Pin_5 | GPIO_Pin_6 | GPIO_Pin_7;
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+	GPIO_Init(GPIOA, &GPIO_InitStructure);
+
+	PWM_Init();
 }
 /**************************************************
 函数名称：forward(u16 speed)
