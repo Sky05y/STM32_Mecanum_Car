@@ -33,7 +33,7 @@ I (..\STM32F10x_FWLib\inc\stm32f10x_wwdg.h)(0x4D783BB4)
 I (..\STM32F10x_FWLib\inc\misc.h)(0x4D783BB4)
 I (..\SYSTEM\usart\usart.h)(0x687B7AB6)
 I (..\APP\Control\control.h)(0x6890C6F4)
-I (..\APP\Motor\motor.h)(0x687B7AB4)
+I (..\APP\Motor\motor.h)(0x68C69097)
 I (..\APP\NRF24L01\nrf24l01.h)(0x687B7AB4)
 I (..\HARDWARE\LED\led.h)(0x687B7AB4)
 I (..\APP\HCSR04\hcsr.h)(0x687B7AB4)
@@ -838,7 +838,7 @@ I (..\STM32F10x_FWLib\inc\stm32f10x_usart.h)(0x4D783BB4)
 I (..\STM32F10x_FWLib\inc\stm32f10x_wwdg.h)(0x4D783BB4)
 I (..\STM32F10x_FWLib\inc\misc.h)(0x4D783BB4)
 F (..\SYSTEM\sys\sys.h)(0x687B7AB6)()
-F (..\SYSTEM\usart\usart.c)(0x6890E3CB)(--c99 -c --cpu Cortex-M3 -g -O0 --apcs=interwork --split_sections -I ..\USER -I ..\CORE -I ..\STM32F10x_FWLib\inc -I ..\APP\Control -I ..\APP\HCSR04 -I ..\APP\JoyStick -I ..\APP\KEY -I ..\APP\Motor -I ..\APP\MPU6050 -I ..\APP\MPU6050\eMPL -I ..\APP\NRF24L01 -I ..\APP\OLED -I ..\APP\PCA9685 -I ..\APP\SDCard -I ..\APP\TCRT5000 -I ..\APP\WS2812B -I ..\HARDWARE\ADC -I ..\HARDWARE\CAN -I ..\HARDWARE\DMA -I ..\HARDWARE\EXTI -I ..\HARDWARE\FLASH -I ..\HARDWARE\GAP -I ..\HARDWARE\GPIO -I ..\HARDWARE\IIC -I ..\HARDWARE\IWDG -I ..\HARDWARE\LED -I ..\HARDWARE\PWM -I ..\HARDWARE\SPI -I ..\HARDWARE\TIM -I ..\MALLOC -I ..\SYSTEM\delay -I ..\SYSTEM\printf -I ..\SYSTEM\sys -I ..\SYSTEM\usart-I.\RTE\_Car-ID:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.2.0\Device\Include-ID:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="524" -DSTM32F10X_MD -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER-o ..\obj\usart.o --omf_browse ..\obj\usart.crf --depend ..\obj\usart.d)
+F (..\SYSTEM\usart\usart.c)(0x68C95C6F)(--c99 -c --cpu Cortex-M3 -g -O0 --apcs=interwork --split_sections -I ..\USER -I ..\CORE -I ..\STM32F10x_FWLib\inc -I ..\APP\Control -I ..\APP\HCSR04 -I ..\APP\JoyStick -I ..\APP\KEY -I ..\APP\Motor -I ..\APP\MPU6050 -I ..\APP\MPU6050\eMPL -I ..\APP\NRF24L01 -I ..\APP\OLED -I ..\APP\PCA9685 -I ..\APP\SDCard -I ..\APP\TCRT5000 -I ..\APP\WS2812B -I ..\HARDWARE\ADC -I ..\HARDWARE\CAN -I ..\HARDWARE\DMA -I ..\HARDWARE\EXTI -I ..\HARDWARE\FLASH -I ..\HARDWARE\GAP -I ..\HARDWARE\GPIO -I ..\HARDWARE\IIC -I ..\HARDWARE\IWDG -I ..\HARDWARE\LED -I ..\HARDWARE\PWM -I ..\HARDWARE\SPI -I ..\HARDWARE\TIM -I ..\MALLOC -I ..\SYSTEM\delay -I ..\SYSTEM\printf -I ..\SYSTEM\sys -I ..\SYSTEM\usart-I.\RTE\_Car-ID:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.2.0\Device\Include-ID:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="524" -DSTM32F10X_MD -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER-o ..\obj\usart.o --omf_browse ..\obj\usart.crf --depend ..\obj\usart.d)
 I (..\SYSTEM\sys\sys.h)(0x687B7AB6)
 I (..\USER\stm32f10x.h)(0x4D783CB4)
 I (..\CORE\core_cm3.h)(0x4D523B58)
@@ -1445,8 +1445,8 @@ I (..\HARDWARE\SPI\spi.h)(0x687B7AB5)
 I (..\SYSTEM\usart\usart.h)(0x687B7AB6)
 I (D:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x588B8344)
 F (..\APP\NRF24L01\nrf24l01.h)(0x687B7AB4)()
-F (..\APP\Motor\motor.c)(0x68C4E68F)(--c99 -c --cpu Cortex-M3 -g -O0 --apcs=interwork --split_sections -I ..\USER -I ..\CORE -I ..\STM32F10x_FWLib\inc -I ..\APP\Control -I ..\APP\HCSR04 -I ..\APP\JoyStick -I ..\APP\KEY -I ..\APP\Motor -I ..\APP\MPU6050 -I ..\APP\MPU6050\eMPL -I ..\APP\NRF24L01 -I ..\APP\OLED -I ..\APP\PCA9685 -I ..\APP\SDCard -I ..\APP\TCRT5000 -I ..\APP\WS2812B -I ..\HARDWARE\ADC -I ..\HARDWARE\CAN -I ..\HARDWARE\DMA -I ..\HARDWARE\EXTI -I ..\HARDWARE\FLASH -I ..\HARDWARE\GAP -I ..\HARDWARE\GPIO -I ..\HARDWARE\IIC -I ..\HARDWARE\IWDG -I ..\HARDWARE\LED -I ..\HARDWARE\PWM -I ..\HARDWARE\SPI -I ..\HARDWARE\TIM -I ..\MALLOC -I ..\SYSTEM\delay -I ..\SYSTEM\printf -I ..\SYSTEM\sys -I ..\SYSTEM\usart-I.\RTE\_Car-ID:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.2.0\Device\Include-ID:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="524" -DSTM32F10X_MD -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER-o ..\obj\motor.o --omf_browse ..\obj\motor.crf --depend ..\obj\motor.d)
-I (..\APP\Motor\motor.h)(0x687B7AB4)
+F (..\APP\Motor\motor.c)(0x68C96278)(--c99 -c --cpu Cortex-M3 -g -O0 --apcs=interwork --split_sections -I ..\USER -I ..\CORE -I ..\STM32F10x_FWLib\inc -I ..\APP\Control -I ..\APP\HCSR04 -I ..\APP\JoyStick -I ..\APP\KEY -I ..\APP\Motor -I ..\APP\MPU6050 -I ..\APP\MPU6050\eMPL -I ..\APP\NRF24L01 -I ..\APP\OLED -I ..\APP\PCA9685 -I ..\APP\SDCard -I ..\APP\TCRT5000 -I ..\APP\WS2812B -I ..\HARDWARE\ADC -I ..\HARDWARE\CAN -I ..\HARDWARE\DMA -I ..\HARDWARE\EXTI -I ..\HARDWARE\FLASH -I ..\HARDWARE\GAP -I ..\HARDWARE\GPIO -I ..\HARDWARE\IIC -I ..\HARDWARE\IWDG -I ..\HARDWARE\LED -I ..\HARDWARE\PWM -I ..\HARDWARE\SPI -I ..\HARDWARE\TIM -I ..\MALLOC -I ..\SYSTEM\delay -I ..\SYSTEM\printf -I ..\SYSTEM\sys -I ..\SYSTEM\usart-I.\RTE\_Car-ID:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.2.0\Device\Include-ID:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="524" -DSTM32F10X_MD -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER-o ..\obj\motor.o --omf_browse ..\obj\motor.crf --depend ..\obj\motor.d)
+I (..\APP\Motor\motor.h)(0x68C69097)
 I (..\SYSTEM\sys\sys.h)(0x687B7AB6)
 I (..\USER\stm32f10x.h)(0x4D783CB4)
 I (..\CORE\core_cm3.h)(0x4D523B58)
@@ -1478,7 +1478,7 @@ I (..\STM32F10x_FWLib\inc\stm32f10x_wwdg.h)(0x4D783BB4)
 I (..\STM32F10x_FWLib\inc\misc.h)(0x4D783BB4)
 I (..\SYSTEM\delay\delay.h)(0x687B7AB6)
 I (..\HARDWARE\PWM\pwm.h)(0x68C4EB8E)
-F (..\APP\Motor\motor.h)(0x687B7AB4)()
+F (..\APP\Motor\motor.h)(0x68C69097)()
 F (..\APP\HCSR04\hcsr.c)(0x687B7AB4)(--c99 -c --cpu Cortex-M3 -g -O0 --apcs=interwork --split_sections -I ..\USER -I ..\CORE -I ..\STM32F10x_FWLib\inc -I ..\APP\Control -I ..\APP\HCSR04 -I ..\APP\JoyStick -I ..\APP\KEY -I ..\APP\Motor -I ..\APP\MPU6050 -I ..\APP\MPU6050\eMPL -I ..\APP\NRF24L01 -I ..\APP\OLED -I ..\APP\PCA9685 -I ..\APP\SDCard -I ..\APP\TCRT5000 -I ..\APP\WS2812B -I ..\HARDWARE\ADC -I ..\HARDWARE\CAN -I ..\HARDWARE\DMA -I ..\HARDWARE\EXTI -I ..\HARDWARE\FLASH -I ..\HARDWARE\GAP -I ..\HARDWARE\GPIO -I ..\HARDWARE\IIC -I ..\HARDWARE\IWDG -I ..\HARDWARE\LED -I ..\HARDWARE\PWM -I ..\HARDWARE\SPI -I ..\HARDWARE\TIM -I ..\MALLOC -I ..\SYSTEM\delay -I ..\SYSTEM\printf -I ..\SYSTEM\sys -I ..\SYSTEM\usart-I.\RTE\_Car-ID:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.2.0\Device\Include-ID:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="524" -DSTM32F10X_MD -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER-o ..\obj\hcsr.o --omf_browse ..\obj\hcsr.crf --depend ..\obj\hcsr.d)
 I (..\APP\HCSR04\hcsr.h)(0x687B7AB4)
 I (..\SYSTEM\sys\sys.h)(0x687B7AB6)
@@ -1515,7 +1515,7 @@ I (..\SYSTEM\usart\usart.h)(0x687B7AB6)
 I (D:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x588B8344)
 I (D:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x588B8344)
 F (..\APP\HCSR04\hcsr.h)(0x687B7AB4)()
-F (..\APP\Control\control.c)(0x68C589EC)(--c99 -c --cpu Cortex-M3 -g -O0 --apcs=interwork --split_sections -I ..\USER -I ..\CORE -I ..\STM32F10x_FWLib\inc -I ..\APP\Control -I ..\APP\HCSR04 -I ..\APP\JoyStick -I ..\APP\KEY -I ..\APP\Motor -I ..\APP\MPU6050 -I ..\APP\MPU6050\eMPL -I ..\APP\NRF24L01 -I ..\APP\OLED -I ..\APP\PCA9685 -I ..\APP\SDCard -I ..\APP\TCRT5000 -I ..\APP\WS2812B -I ..\HARDWARE\ADC -I ..\HARDWARE\CAN -I ..\HARDWARE\DMA -I ..\HARDWARE\EXTI -I ..\HARDWARE\FLASH -I ..\HARDWARE\GAP -I ..\HARDWARE\GPIO -I ..\HARDWARE\IIC -I ..\HARDWARE\IWDG -I ..\HARDWARE\LED -I ..\HARDWARE\PWM -I ..\HARDWARE\SPI -I ..\HARDWARE\TIM -I ..\MALLOC -I ..\SYSTEM\delay -I ..\SYSTEM\printf -I ..\SYSTEM\sys -I ..\SYSTEM\usart-I.\RTE\_Car-ID:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.2.0\Device\Include-ID:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="524" -DSTM32F10X_MD -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER-o ..\obj\control.o --omf_browse ..\obj\control.crf --depend ..\obj\control.d)
+F (..\APP\Control\control.c)(0x68C96F16)(--c99 -c --cpu Cortex-M3 -g -O0 --apcs=interwork --split_sections -I ..\USER -I ..\CORE -I ..\STM32F10x_FWLib\inc -I ..\APP\Control -I ..\APP\HCSR04 -I ..\APP\JoyStick -I ..\APP\KEY -I ..\APP\Motor -I ..\APP\MPU6050 -I ..\APP\MPU6050\eMPL -I ..\APP\NRF24L01 -I ..\APP\OLED -I ..\APP\PCA9685 -I ..\APP\SDCard -I ..\APP\TCRT5000 -I ..\APP\WS2812B -I ..\HARDWARE\ADC -I ..\HARDWARE\CAN -I ..\HARDWARE\DMA -I ..\HARDWARE\EXTI -I ..\HARDWARE\FLASH -I ..\HARDWARE\GAP -I ..\HARDWARE\GPIO -I ..\HARDWARE\IIC -I ..\HARDWARE\IWDG -I ..\HARDWARE\LED -I ..\HARDWARE\PWM -I ..\HARDWARE\SPI -I ..\HARDWARE\TIM -I ..\MALLOC -I ..\SYSTEM\delay -I ..\SYSTEM\printf -I ..\SYSTEM\sys -I ..\SYSTEM\usart-I.\RTE\_Car-ID:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.2.0\Device\Include-ID:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="524" -DSTM32F10X_MD -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER-o ..\obj\control.o --omf_browse ..\obj\control.crf --depend ..\obj\control.d)
 I (..\APP\Control\control.h)(0x6890C6F4)
 I (..\SYSTEM\sys\sys.h)(0x687B7AB6)
 I (..\USER\stm32f10x.h)(0x4D783CB4)
@@ -1549,7 +1549,7 @@ I (..\STM32F10x_FWLib\inc\misc.h)(0x4D783BB4)
 I (..\SYSTEM\delay\delay.h)(0x687B7AB6)
 I (..\SYSTEM\usart\usart.h)(0x687B7AB6)
 I (D:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x588B8344)
-I (..\APP\Motor\motor.h)(0x687B7AB4)
+I (..\APP\Motor\motor.h)(0x68C69097)
 I (..\APP\NRF24L01\nrf24l01.h)(0x687B7AB4)
 I (..\HARDWARE\LED\led.h)(0x687B7AB4)
 I (..\APP\HCSR04\hcsr.h)(0x687B7AB4)

@@ -5,22 +5,22 @@
 
 
 
-#define L_AIN2_ON  	GPIO_SetBits(GPIOB,GPIO_Pin_5)    //Êä³ö¸ßµçÆ½
-#define L_AIN2_OFF 	GPIO_ResetBits(GPIOB,GPIO_Pin_5)  //Êä³öµÍµçÆ½
-#define R_AIN2_ON 	GPIO_SetBits(GPIOB,GPIO_Pin_8)    //Êä³ö¸ßµçÆ½
-#define R_AIN2_OFF  GPIO_ResetBits(GPIOB,GPIO_Pin_8)  //Êä³öµÍµçÆ½
+#define L_AIN2_ON  	GPIO_SetBits(GPIOB,GPIO_Pin_5)    //ï¿½ï¿½ï¿½ï¿½ßµï¿½Æ½
+#define L_AIN2_OFF 	GPIO_ResetBits(GPIOB,GPIO_Pin_5)  //ï¿½ï¿½ï¿½ï¿½Íµï¿½Æ½
+#define R_AIN2_ON 	GPIO_SetBits(GPIOB,GPIO_Pin_8)    //ï¿½ï¿½ï¿½ï¿½ßµï¿½Æ½
+#define R_AIN2_OFF  GPIO_ResetBits(GPIOB,GPIO_Pin_8)  //ï¿½ï¿½ï¿½ï¿½Íµï¿½Æ½
 
 
-#define L_BIN2_ON 	GPIO_SetBits(GPIOB,GPIO_Pin_6)    //Êä³ö¸ßµçÆ½
-#define L_BIN2_OFF  GPIO_ResetBits(GPIOB,GPIO_Pin_6)  //Êä³öµÍµçÆ½
-#define R_BIN2_ON 	GPIO_SetBits(GPIOB,GPIO_Pin_7)    //Êä³ö¸ßµçÆ½
-#define R_BIN2_OFF  GPIO_ResetBits(GPIOB,GPIO_Pin_7)  //Êä³öµÍµçÆ½
+#define L_BIN2_ON 	GPIO_SetBits(GPIOB,GPIO_Pin_6)    //ï¿½ï¿½ï¿½ï¿½ßµï¿½Æ½
+#define L_BIN2_OFF  GPIO_ResetBits(GPIOB,GPIO_Pin_6)  //ï¿½ï¿½ï¿½ï¿½Íµï¿½Æ½
+#define R_BIN2_ON 	GPIO_SetBits(GPIOB,GPIO_Pin_7)    //ï¿½ï¿½ï¿½ï¿½ßµï¿½Æ½
+#define R_BIN2_OFF  GPIO_ResetBits(GPIOB,GPIO_Pin_7)  //ï¿½ï¿½ï¿½ï¿½Íµï¿½Æ½
 
 
-#define L_STBY_ON 	GPIO_SetBits(GPIOB,GPIO_Pin_4)    //Êä³ö¸ßµçÆ½,µç»ú¹¤×÷
-#define L_STBY_OFF  GPIO_ResetBits(GPIOB,GPIO_Pin_4)  //Êä³öµÍµçÆ½,µç»úÍ£Ö¹
-#define R_STBY_ON 	GPIO_SetBits(GPIOB,GPIO_Pin_9)    //Êä³ö¸ßµçÆ½,µç»ú¹¤×÷
-#define R_STBY_OFF  GPIO_ResetBits(GPIOB,GPIO_Pin_9)  //Êä³öµÍµçÆ½,µç»úÍ£Ö¹
+#define L_STBY_ON 	GPIO_SetBits(GPIOB,GPIO_Pin_4)    //ï¿½ï¿½ï¿½ï¿½ßµï¿½Æ½,ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+#define L_STBY_OFF  GPIO_ResetBits(GPIOB,GPIO_Pin_4)  //ï¿½ï¿½ï¿½ï¿½Íµï¿½Æ½,ï¿½ï¿½ï¿½Í£Ö¹
+#define R_STBY_ON 	GPIO_SetBits(GPIOB,GPIO_Pin_9)    //ï¿½ï¿½ï¿½ï¿½ßµï¿½Æ½,ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+#define R_STBY_OFF  GPIO_ResetBits(GPIOB,GPIO_Pin_9)  //ï¿½ï¿½ï¿½ï¿½Íµï¿½Æ½,ï¿½ï¿½ï¿½Í£Ö¹
 
 #define L_Move   0
 #define R_Move   1
@@ -44,5 +44,6 @@ void Left_Turn(u16 speed);
 void Right_Turn(u16 speed);
 void Move(u16 Dir,u16 speed);
 void Motion_State(u16 mode);
-		 				    
+void Motor_SetLeftSpeed(int8_t speed);
+void Motor_SetRightSpeed(int8_t speed);	 				    
 #endif

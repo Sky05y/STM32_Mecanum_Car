@@ -243,6 +243,49 @@ void Motor_Init(void)
 
 	PWM_Init();
 }
+
+void Motor_SetLeftSpeed(int8_t speed)
+{
+	if (speed > 0)
+	{
+		GPIO_SetBits(GPIOA, GPIO_Pin_4);
+		GPIO_ResetBits(GPIOA, GPIO_Pin_5);
+		PWM_SetCompare3(speed);
+	}
+	else if (speed < 0)
+	{
+		GPIO_SetBits(GPIOA, GPIO_Pin_5);
+		GPIO_ResetBits(GPIOA, GPIO_Pin_4);
+		PWM_SetCompare3(-speed);
+	}
+	else
+	{
+		GPIO_SetBits(GPIOA, GPIO_Pin_4 | GPIO_Pin_5);
+		PWM_SetCompare3(0);
+	}
+
+}
+
+void Motor_SetRightSpeed(int8_t speed)
+{
+	if (speed > 0)
+	{
+		GPIO_SetBits(GPIOA, GPIO_Pin_6);
+		GPIO_ResetBits(GPIOA, GPIO_Pin_7);
+		PWM_SetCompare3(speed);
+	}
+	else if (speed < 0)
+	{
+		GPIO_SetBits(GPIOA, GPIO_Pin_7);
+		GPIO_ResetBits(GPIOA, GPIO_Pin_6);
+		PWM_SetCompare3(-speed);
+	}
+	else
+	{
+		GPIO_SetBits(GPIOA, GPIO_Pin_6 | GPIO_Pin_7);
+		PWM_SetCompare3(0);
+	}
+}
 /**************************************************
 函数名称：forward(u16 speed)
 函数功能：小车前进

@@ -1,5 +1,5 @@
 #include "control.h"
-
+#include "motor.h"
 u8 Joy_RxBuf[20];//ҡ�˽������ݻ�����
 u8 MPU_RxBuf[10];//�����ǽ������ݻ�����
 u8 Joy_Lpos,Joy_Rpos;//ҡ����������
@@ -588,9 +588,9 @@ void set_motor(uint8_t motor_id, int16_t speed)
 ***************************************************/
 void APP_Joy_Mode(void)
 {
-	int Joy_Lx=50, Joy_Ly = 50, Joy_Rx = 50, Joy_Ry = 50;
-	int Map_Lx, Map_Ly, Map_Rx, Map_Ry;
-	int pwm1, pwm2, pwm3, pwm4;
+	int Joy_Lx=50, Joy_Ly = 50, Joy_Rx = 50;
+	int Map_Lx, Map_Ly, Map_Rx;
+	int speed_l=0, speed_r=0;
 	
 	if (Lx_Buf[0] == 'L')
 	{
@@ -600,78 +600,52 @@ void APP_Joy_Mode(void)
 	if (Rx_Buf[0] == 'R')
 	{
 		Joy_Rx = (Rx_Buf[2] - '0') * 10 + (Rx_Buf[3] - '0');
-		Joy_Ry = (Rx_Buf[5] - '0') * 10 + (Rx_Buf[6] - '0');
 	}
 	
-	Map_Lx = Map(Joy_Lx, 10, 90, -127, 127);
-	Map_Ly = Map(Joy_Ly, 10, 90, -127, 127);
-	Map_Rx = Map(Joy_Rx, 10, 90, -127, 127);
-	Map_Ry = Map(Joy_Ry, 10, 90, -127, 127);
-
-	// 电机1 左下 → pwm1
-	// 电机2 右下 → pwm2
-	// 电机3 左上 → pwm3
-	// 电机4 右上 → pwm4
-	// pwm1 = -Map_Ly + Map_Lx - Map_Ry + Map_Rx;
-	// pwm2 = -Map_Ly - Map_Lx - Map_Ry - Map_Rx;
-	pwm1 = Map_Ly;
-	pwm2 = Map_Ly;
-	pwm3 = -Map_Ly + Map_Lx - Map_Ry - Map_Rx;
-	pwm4 = -Map_Ly - Map_Lx - Map_Ry + Map_Rx;
-	// Map_Lx = -20;
-	// Map_Ly = 20;
-	// pwm1 = Map_Lx;
-	// pwm2 = Map_Lx;
-	// pwm3 = Map_Ly;
-	// pwm4 = Map_Ly;
-
-	pwm1 = Map(pwm1, -127, 127, -499, 499);
-	pwm2 = Map(pwm2, -127, 127, -499, 499);
-	pwm3 = Map(pwm3, -127, 127, -499, 499);
-	pwm4 = Map(pwm4, -127, 127, -499, 499);
+	Map_Lx = Map(Joy_Lx, 10, 90, -90, 90);
+	Map_Ly = Map(Joy_Ly, 10, 90, -90, 90);
+	Map_Rx = Map(Joy_Rx, 10, 90, -130, 130);
 	
-	// printf("Lx=%d, Ly=%d, Rx=%d, Ry=%d\n", Joy_Lx, Joy_Ly, Joy_Rx, Joy_Ry);
-	// printf("Map_Lx=%d, Map_Ly=%d, Map_Rx=%d, Map_Ry=%d\n", Map_Lx, Map_Ly, Map_Rx, Map_Ry);
-	// if(!pwm1 && !pwm2 && !pwm3 && !pwm4)
-	// {
-	// 	Motion_State(6);//关闭电机驱动失能
-	// 	return;
-	// }
-	// printf("pwm1=%d, pwm2=%d, pwm3=%d, pwm4=%d\n", pwm1, pwm2, pwm3, pwm4);
-	if (pwm1 < 20 && pwm1 >-20)pwm1 = 0;
-	if (pwm2 < 20 && pwm2 >-20)pwm2 = 0;
-	if (pwm3 < 20 && pwm3 >-20)pwm3 = 0;
-	if (pwm4 < 20 && pwm4 >-20)pwm4 = 0;
+	speed_l = Map_Ly;
+	speed_r = Map_Ly;
 
-	if (pwm1 > 499)pwm1 = 499;
-	if (pwm2 > 499)pwm2 = 499;
-	if (pwm3 > 499)pwm3 = 499;
-	if (pwm4 > 499)pwm4 = 499;
-	
-	if (pwm1 < -499)pwm1 = -499;
-	if (pwm2 < -499)pwm2 = -499;
-	if (pwm3 < -499)pwm3 = -499;
-	if (pwm4 < -499)pwm4 = -499;
-	
+	int tmpx = Map_Lx*3;
+	if(Map_Ly > 0)
+	{
+		if(tmpx > 0)
+		{
+			speed_r += tmpx;
+		}
+		else if(tmpx < 0)
+		{
+			speed_l -= tmpx;
+		}
+	}
+	else
+	{
+		if(tmpx > 0)
+		{
+			speed_r -= tmpx;
+		}
+		else if(tmpx < 0)
+		{
+			speed_l += tmpx;
+		}
+	}
+	// if (speed_l < 20 && speed_l >-20)speed_l = 0;
+	// if (speed_r < 20 && speed_r >-20)speed_r = 0;	
+	if(Map_Rx == 0)
+	{
+		Motor_SetLeftSpeed(speed_l);
+		Motor_SetRightSpeed(speed_r);
+	}
+	else
+	{
+		Motor_SetLeftSpeed(-Map_Rx);
+		Motor_SetRightSpeed(Map_Rx);
+	}
+	delay_ms(200);
 
-	// 
-	// set_motor(pwm1, GPIOA, GPIO_Pin_0, GPIOB, GPIO_Pin_5, TIM3, 1); // 电机1: PWM = TIM3_CH1
-	// set_motor(pwm2, GPIOA, GPIO_Pin_1, GPIOB, GPIO_Pin_6, TIM3, 2); // 电机2: PWM = TIM3_CH2
-    // set_motor(pwm3, GPIOA, GPIO_Pin_2, GPIOB, GPIO_Pin_7); // 电机3：A3 B3
-    // set_motor(pwm4, GPIOA, GPIO_Pin_3, GPIOB, GPIO_Pin_8); // 电机4：A4 B4
-	// set_motor(pwm1, 400);
-	// set_motor(pwm2, 400);
-	// set_motor(pwm3, -400);
-	// set_motor(pwm4, -400);
-    // TIM4->CCR1 = 250;   // PB6 → 电机1_A
-    // TIM4->CCR2 = 250;   // PB7 → 电机1_B
-    // TIM3->CCR1 = 250;   // PA6 → 电机2_A
-    // TIM3->CCR2 = 250;   // PA7 → 电机2_B
-	delay_ms(10);
-//	printf(Lx_Buf);
-//	printf(Rx_Buf);
-//	printf(Rx_Buf);
-//	printf("\n");
 }
 
 /**************************************************
