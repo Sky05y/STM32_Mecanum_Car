@@ -588,13 +588,12 @@ void set_motor(uint8_t motor_id, int16_t speed)
 ***************************************************/
 void APP_Joy_Mode(void)
 {
-	int Joy_Lx=50, Joy_Ly = 50, Joy_Rx = 50;
-	int Map_Lx, Map_Ly, Map_Rx;
+	int Joy_Ly = 50, Joy_Rx = 50;
+	int Map_Ly, Map_Rx;
 	int speed_l=0, speed_r=0;
 	
 	if (Lx_Buf[0] == 'L')
 	{
-		Joy_Lx = (Lx_Buf[2] - '0') * 10 + (Lx_Buf[3] - '0');
 		Joy_Ly = (Lx_Buf[5] - '0') * 10 + (Lx_Buf[6] - '0');
 	}
 	if (Rx_Buf[0] == 'R')
@@ -602,38 +601,14 @@ void APP_Joy_Mode(void)
 		Joy_Rx = (Rx_Buf[2] - '0') * 10 + (Rx_Buf[3] - '0');
 	}
 	
-	Map_Lx = Map(Joy_Lx, 10, 90, -90, 90);
-	Map_Ly = Map(Joy_Ly, 10, 90, -90, 90);
-	Map_Rx = Map(Joy_Rx, 10, 90, -130, 130);
+	Map_Ly = Map(Joy_Ly, 10, 90, -127, 127);
+	Map_Rx = Map(Joy_Rx, 10, 90, -127, 127); //最大只能127.超过就溢出
 	
 	speed_l = Map_Ly;
 	speed_r = Map_Ly;
 
-	int tmpx = Map_Lx*3;
-	if(Map_Ly > 0)
-	{
-		if(tmpx > 0)
-		{
-			speed_r += tmpx;
-		}
-		else if(tmpx < 0)
-		{
-			speed_l -= tmpx;
-		}
-	}
-	else
-	{
-		if(tmpx > 0)
-		{
-			speed_r -= tmpx;
-		}
-		else if(tmpx < 0)
-		{
-			speed_l += tmpx;
-		}
-	}
-	// if (speed_l < 20 && speed_l >-20)speed_l = 0;
-	// if (speed_r < 20 && speed_r >-20)speed_r = 0;	
+	if (speed_l < 15 && speed_l >-15)speed_l = 0;
+	if (speed_r < 15 && speed_r >-15)speed_r = 0;	
 	if(Map_Rx == 0)
 	{
 		Motor_SetLeftSpeed(speed_l);
@@ -644,7 +619,7 @@ void APP_Joy_Mode(void)
 		Motor_SetLeftSpeed(-Map_Rx);
 		Motor_SetRightSpeed(Map_Rx);
 	}
-	delay_ms(200);
+	delay_ms(40);
 
 }
 

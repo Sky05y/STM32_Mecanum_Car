@@ -3,7 +3,7 @@
 <title>Static Call Graph - [..\OBJ\Mcar.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image ..\OBJ\Mcar.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060528: Last Updated: Tue Sep 16 22:07:32 2025
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060528: Last Updated: Fri Sep 19 14:50:56 2025
 <BR><P>
 <H3>Maximum Stack Usage =        144 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -454,8 +454,8 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[47]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__rt_entry_main
 </UL>
 
-<P><STRONG><a name="[5a]"></a>APP_Joy_Mode</STRONG> (Thumb, 238 bytes, Stack size 48 bytes, control.o(i.APP_Joy_Mode))
-<BR><BR>[Stack]<UL><LI>Max Depth = 64<LI>Call Chain = APP_Joy_Mode &rArr; Motor_SetRightSpeed &rArr; PWM_SetCompare3
+<P><STRONG><a name="[5a]"></a>APP_Joy_Mode</STRONG> (Thumb, 174 bytes, Stack size 32 bytes, control.o(i.APP_Joy_Mode))
+<BR><BR>[Stack]<UL><LI>Max Depth = 48<LI>Call Chain = APP_Joy_Mode &rArr; Motor_SetRightSpeed &rArr; PWM_SetCompare3
 </UL>
 <BR>[Calls]<UL><LI><a href="#[5e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delay_ms
 <LI><a href="#[5d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Motor_SetRightSpeed
@@ -466,7 +466,7 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[5f]"></a>Bluetooth_Mode</STRONG> (Thumb, 8 bytes, Stack size 8 bytes, control.o(i.Bluetooth_Mode))
-<BR><BR>[Stack]<UL><LI>Max Depth = 72<LI>Call Chain = Bluetooth_Mode &rArr; APP_Joy_Mode &rArr; Motor_SetRightSpeed &rArr; PWM_SetCompare3
+<BR><BR>[Stack]<UL><LI>Max Depth = 56<LI>Call Chain = Bluetooth_Mode &rArr; APP_Joy_Mode &rArr; Motor_SetRightSpeed &rArr; PWM_SetCompare3
 </UL>
 <BR>[Calls]<UL><LI><a href="#[5a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;APP_Joy_Mode
 </UL>
@@ -862,7 +862,7 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[89]"></a>my_Mode</STRONG> (Thumb, 8 bytes, Stack size 8 bytes, control.o(i.my_Mode))
-<BR><BR>[Stack]<UL><LI>Max Depth = 80<LI>Call Chain = my_Mode &rArr; Bluetooth_Mode &rArr; APP_Joy_Mode &rArr; Motor_SetRightSpeed &rArr; PWM_SetCompare3
+<BR><BR>[Stack]<UL><LI>Max Depth = 64<LI>Call Chain = my_Mode &rArr; Bluetooth_Mode &rArr; APP_Joy_Mode &rArr; Motor_SetRightSpeed &rArr; PWM_SetCompare3
 </UL>
 <BR>[Calls]<UL><LI><a href="#[5f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Bluetooth_Mode
 </UL>
