@@ -56,7 +56,7 @@ int main(void)
     delay_ms(1000);
     while(1)
     {
-        my_Mode();
+        Bluetooth_Mode();
     }
 
 

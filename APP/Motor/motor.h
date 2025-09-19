@@ -44,6 +44,6 @@ void Left_Turn(u16 speed);
 void Right_Turn(u16 speed);
 void Move(u16 Dir,u16 speed);
 void Motion_State(u16 mode);
-void Motor_SetLeftSpeed(int8_t speed);
-void Motor_SetRightSpeed(int8_t speed);	 				    
+void Motor_SetLeftSpeed(int16_t speed);
+void Motor_SetRightSpeed(int16_t speed);	 				    
 #endif

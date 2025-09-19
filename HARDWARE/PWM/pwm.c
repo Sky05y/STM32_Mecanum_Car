@@ -260,9 +260,15 @@ void PWM_Init() // u32 arr,u32 psc
 
 	GPIO_InitTypeDef GPIO_InitStructure;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_2;
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+
+	// PA2 -> TIM2_CH3 (PWMA)
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_2;
 	GPIO_Init(GPIOA,&GPIO_InitStructure);
+
+	// PA3 -> TIM2_CH4 (PWMB)
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_3;
+    GPIO_Init(GPIOA, &GPIO_InitStructure);
 
 	TIM_InternalClockConfig(TIM2);
 
@@ -279,16 +285,18 @@ void PWM_Init() // u32 arr,u32 psc
 	TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_PWM1;
 	TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_High;
 	TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable;
+
+	// CH3 -> PA2 (PWMA)
 	TIM_OCInitStructure.TIM_Pulse = 0; // CCR
 	TIM_OC3Init(TIM2,&TIM_OCInitStructure);
+
+    // CH4 -> PA3 (PWMB)
+    TIM_OCInitStructure.TIM_Pulse = 0;
+    TIM_OC4Init(TIM2, &TIM_OCInitStructure);
 
 	TIM_Cmd(TIM2,ENABLE);
 }
 
-void PWM_SetCompare3(uint16_t Compare)
-{
-	TIM_SetCompare3(TIM2,Compare);
-}
 /**************************************************
 �������ƣ�PWM(int angle)
 �������ܣ�PWM�ź�ת���ǶȺ���

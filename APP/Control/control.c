@@ -60,8 +60,10 @@ void Bluetooth_Mode(void)
 	// else if(mode_flag==6)RGB_mode=1;//��ˮ��
 	// else if(mode_flag==7)RGB_mode=2;//��˸��
 	// else Motion_State(ON);
-	
-	APP_Joy_Mode();
+	if(mode_flag==1)
+		APP_Joy_Mode();
+	else if(mode_flag==2)
+		APP_Gravity_Mode();
 }
 
 /**************************************************
@@ -428,10 +430,6 @@ void Follow_Mode(void)
 	}
 	else Motion_State(ON);
 }
-void my_Mode(void)
-{
-	Bluetooth_Mode();
-}
 
 /**************************************************
 �������ƣ�void RGB_Select(void)
@@ -588,24 +586,31 @@ void set_motor(uint8_t motor_id, int16_t speed)
 ***************************************************/
 void APP_Joy_Mode(void)
 {
-	int Joy_Ly = 50, Joy_Rx = 50;
-	int Map_Ly, Map_Rx;
+	int Joy_Lx = 50, Joy_Ly = 50, Joy_Rx = 50;
+	int Map_Lx, Map_Ly, Map_Rx;
 	int speed_l=0, speed_r=0;
 	
 	if (Lx_Buf[0] == 'L')
 	{
+		Joy_Lx = (Lx_Buf[2] - '0') * 10 + (Lx_Buf[3] - '0');
 		Joy_Ly = (Lx_Buf[5] - '0') * 10 + (Lx_Buf[6] - '0');
 	}
 	if (Rx_Buf[0] == 'R')
 	{
 		Joy_Rx = (Rx_Buf[2] - '0') * 10 + (Rx_Buf[3] - '0');
 	}
-	
-	Map_Ly = Map(Joy_Ly, 10, 90, -127, 127);
+	Map_Lx = Map(Joy_Lx, 10, 90, -25, 25);
+	Map_Ly = Map(Joy_Ly, 10, 90, -100, 100);
 	Map_Rx = Map(Joy_Rx, 10, 90, -127, 127); //最大只能127.超过就溢出
 	
-	speed_l = Map_Ly;
-	speed_r = Map_Ly;
+	if(Map_Ly > 0)
+	{
+		Map_Lx = -Map_Lx; //Y轴负方向时，X取反，确保倒车顺序正确
+	}
+
+	speed_l = Map_Ly + Map_Lx;
+	speed_r = Map_Ly - Map_Lx;
+
 
 	if (speed_l < 15 && speed_l >-15)speed_l = 0;
 	if (speed_r < 15 && speed_r >-15)speed_r = 0;	
@@ -616,52 +621,49 @@ void APP_Joy_Mode(void)
 	}
 	else
 	{
-		Motor_SetLeftSpeed(-Map_Rx);
-		Motor_SetRightSpeed(Map_Rx);
+		Motor_SetLeftSpeed(Map_Rx);
+		Motor_SetRightSpeed(-Map_Rx);
 	}
 	delay_ms(40);
 
 }
 
-/**************************************************
-�������ƣ�APP_Gravity_Mode(void)
-�������ܣ�APP����ģʽ
-��ڲ�������
-���ز�������
-***************************************************/
+// APP_Gravity_Mode：重力感应控制模式
+// 通过手机传过来的 Pitch（俯仰角）、Roll（横滚角）来计算电机 PWM，占空比控制小车运动。
 void APP_Gravity_Mode(void)
 {
 	int i,j=0,Pitch_flag=0;
-	int APP_Pitch=0,APP_Roll=0;
-	int Pitch_symbel=1,Roll_symbel=1;//ƫ���Ƿ���
-	char Pitch_Buf[10],Roll_Buf[10];
-	int Map_pitch, Map_roll;//ӳ����ƫ����
-	int pwm1, pwm2, pwm3, pwm4;
-	static int Smoothing_Pitch_Buf[5];//��ֵ�˲�����
-	static int Smoothing_Roll_Buf[5];//��ֵ�˲�����
-	static int Smoothing_Count=0;//��ֵ�˲���������
-	int Pitch_temp,Roll_temp;//ѡ���������
+	int APP_Pitch=0,APP_Roll=0; // Pitch / Roll 数值
+	int Pitch_symbel=1,Roll_symbel=1; // Pitch/Roll 符号位（+1 正，-1 负）
+	char Pitch_Buf[10],Roll_Buf[10]; // 存放提取出来的 Pitch / Roll 字符串
+	int Map_pitch, Map_roll; // 映射后的 Pitch / Roll
+	int pwm1, pwm2, pwm3, pwm4; // 四个电机的 PWM 值
+	static int Smoothing_Pitch_Buf[5]; // 中值滤波缓存（Pitch）
+	static int Smoothing_Roll_Buf[5]; // 中值滤波缓存（Roll）
+	static int Smoothing_Count=0; // 中值滤波采样计数
+	int Pitch_temp,Roll_temp; // 排序临时变量
 	
+	// 打开左右电机驱动使能
 	L_STBY_ON;
 	R_STBY_ON;
 	
-	//��ȡRoll
+	// ---------------- 1. 提取 Roll 数据 ----------------
 	for(i=1;i<20;i++)
 	{
-		if(Pitch_Roll_Buf[i]=='.')break;
-		Roll_Buf[i-1]=Pitch_Roll_Buf[i];
+		if(Pitch_Roll_Buf[i]=='.')break; // 遇到小数点停止
+		Roll_Buf[i-1]=Pitch_Roll_Buf[i]; // 依次存入 Roll 缓冲区
 	}
-	//��ȡPitch
+	// ---------------- 2. 提取 Pitch 数据 ----------------
 	for(i=0;i<20;i++)
 	{
-		if(Pitch_Roll_Buf[i]==',')
+		if(Pitch_Roll_Buf[i]==',') // 遇到逗号后开始提取 Pitch
 		{
 			Pitch_flag=1;
 			i++;
 		}
 		if(Pitch_flag==1)
 		{
-			if(Pitch_Roll_Buf[i]=='.')
+			if(Pitch_Roll_Buf[i]=='.') // 遇到小数点结束
 			{
 				j=0;
 				break;
@@ -670,13 +672,13 @@ void APP_Gravity_Mode(void)
 			j++;
 		}
 	}
-	//��Roll�ַ���ת��Ϊ��������
+	// ---------------- 3. Roll 字符串转数字 ----------------
 	j=0;
 	for(i=10;i>=0;i--)
 	{
 		if(Roll_Buf[i]>='0'&&Roll_Buf[i]<='9')
 		{
-			APP_Roll+=(Roll_Buf[i]-'0')*pow(10,j);
+			APP_Roll+=(Roll_Buf[i]-'0')*pow(10,j); // 转换成十进制整数
 			j++;
 		}
 		if(Roll_Buf[0]=='-')
@@ -684,7 +686,7 @@ void APP_Gravity_Mode(void)
 			Roll_symbel=-1;
 		}
 	}
-	//��Pitch�ַ���ת��Ϊ��������
+	// ---------------- 4. Pitch 字符串转数字 ----------------
 	j=0;
 	for(i=10;i>=0;i--)
 	{
@@ -698,18 +700,19 @@ void APP_Gravity_Mode(void)
 			Pitch_symbel=-1;
 		}
 	}
-	//�õ�����ƫ��������
+	// 应用符号位得到最终的 Pitch / Roll
 	APP_Pitch=Pitch_symbel*APP_Pitch;
 	APP_Roll=Roll_symbel*APP_Roll;
-	//�������
+	// ---------------- 5. 存入滤波缓冲区 ----------------
 	Smoothing_Pitch_Buf[Smoothing_Count]=APP_Pitch;
 	Smoothing_Roll_Buf[Smoothing_Count]=APP_Roll;
 	Smoothing_Count++;
-	//ѡ������
-	if(Smoothing_Count==5)
+	// ---------------- 6. 中值滤波处理 ----------------
+	if(Smoothing_Count==5)  // 满 5 次后开始处理
 	{
 		Smoothing_Count=0;
 		
+		// 对 Pitch / Roll 分别冒泡排序，取中值
 		for(j = 0; j < 5 - 1; j++) 
 		{
         for(i = 0; i < 5 - j; i++) 
@@ -728,10 +731,11 @@ void APP_Gravity_Mode(void)
             }			
         }
     }
-		//��ֵ�˲�
+		// 取排序后的中间值作为最终结果（中值滤波）
 		APP_Pitch=Smoothing_Pitch_Buf[2];
 		APP_Roll=Smoothing_Roll_Buf[2];
 		
+		// ---------------- 7. 映射角度 → 控制量 ----------------
 		Map_pitch = Map(APP_Pitch, -90, 90, -127, 127);
 		Map_roll = Map(APP_Roll, -90, 90, -127, 127);
 					
@@ -821,7 +825,6 @@ void APP_Gravity_Mode(void)
 	
 	memset(Roll_Buf,0,10);
 	memset(Pitch_Buf,0,10);
-	
 	delay_ms(1);	
 }
 
