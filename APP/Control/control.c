@@ -737,86 +737,42 @@ void APP_Gravity_Mode(void)
 		
 		// ---------------- 7. 映射角度 → 控制量 ----------------
 		Map_pitch = Map(APP_Pitch, -90, 90, -127, 127);
-		Map_roll = Map(APP_Roll, -90, 90, -127, 127);
-					
-		pwm1 =  -Map_pitch + Map_roll;
-		pwm2 =  -Map_pitch - Map_roll;
-		pwm3 =  -Map_pitch + Map_roll;
-		pwm4 =  -Map_pitch - Map_roll;
+		Map_roll = Map(APP_Roll, -90, 90, -50, 50);
 		
+		if(Map_pitch > 0) Map_roll = -Map_roll; // 前进时，Pitch 取反，确保倒车顺序正确
 		
-		pwm1 = Map(pwm1, -127, 127, -499, 499);
-		pwm2 = Map(pwm2, -127, 127, -499, 499);
-		pwm3 = Map(pwm3, -127, 127, -499, 499);
-		pwm4 = Map(pwm4, -127, 127, -499, 499);
+		int speed_left  = Map_pitch + Map_roll;
+		int speed_right = Map_pitch - Map_roll;
+		
+		if(abs(speed_left) < 20)speed_left = 0;
+		
+		if(abs(speed_right) < 20)speed_right = 0;
+		
+		// 左边两个电机 → PWMA
+		if(speed_left >= 0) 
+		{
+			GPIO_SetBits(GPIOA, GPIO_Pin_5);
+			GPIO_ResetBits(GPIOA, GPIO_Pin_4);
+			TIM_SetCompare3(TIM2, speed_left);   // PA2 → PWMA
+		} else 
+		{
+			GPIO_SetBits(GPIOA, GPIO_Pin_4);
+			GPIO_ResetBits(GPIOA, GPIO_Pin_5);
+			TIM_SetCompare3(TIM2, -speed_left);
+		}
 
-		
-		
-		if (pwm1 < 20 && pwm1 >-20)pwm1 = 0;
-		if (pwm2 < 20 && pwm2 >-20)pwm2 = 0;
-		if (pwm3 < 20 && pwm3 >-20)pwm3 = 0;
-		if (pwm4 < 20 && pwm4 >-20)pwm4 = 0;
-
-		if (pwm1 > 499)pwm1 = 499;
-		if (pwm2 > 499)pwm2 = 499;
-		if (pwm3 > 499)pwm3 = 499;
-		if (pwm4 > 499)pwm4 = 499;
-				
-		if (pwm1 < -499)pwm1 = -499;
-		if (pwm2 < -499)pwm2 = -499;
-		if (pwm3 < -499)pwm3 = -499;
-		if (pwm4 < -499)pwm4 = -499;
-				
-
-		
-		if(pwm1>=0)
+		// 右边两个电机 → PWMB
+		if(speed_right >= 0) 
 		{
-			TIM_SetCompare4(TIM2,500-pwm1);//L_BIN2:������
-			L_BIN2_ON;
-			
+			GPIO_SetBits(GPIOA, GPIO_Pin_7);
+			GPIO_ResetBits(GPIOA, GPIO_Pin_6);
+			TIM_SetCompare4(TIM2, speed_right);  // PA3 → PWMB
+		} else 
+		{
+			GPIO_SetBits(GPIOA, GPIO_Pin_6);
+			GPIO_ResetBits(GPIOA, GPIO_Pin_7);
+			TIM_SetCompare4(TIM2, -speed_right);
 		}
-		else if(pwm1<0)
-		{
-			pwm1=abs(pwm1);
-			TIM_SetCompare4(TIM2,pwm1);//L_BIN2:������
-			L_BIN2_OFF;	
-		}
-				
-		if(pwm2>=0)
-		{
-			TIM_SetCompare3(TIM2,pwm2);//L_AIN2:������
-			L_AIN2_OFF;
-		}
-		else if(pwm2<0)
-		{
-			pwm2=abs(pwm2);
-			TIM_SetCompare3(TIM2,500-pwm2);//L_AIN2:������
-			L_AIN2_ON;
-		}
-					
-		if(pwm3>=0)
-		{
-			TIM_SetCompare1(TIM2,500-pwm3);//R_AIN2:������
-			R_AIN2_ON;
-		}
-		else if(pwm3<0)
-		{
-			pwm3=abs(pwm3);
-			TIM_SetCompare1(TIM2,pwm3);//R_AIN2:������
-			R_AIN2_OFF;
-		}
-					
-		if(pwm4>=0)
-		{
-			TIM_SetCompare2(TIM2,pwm4);//R_BIN2:������
-			R_BIN2_OFF;
-		}
-		else if(pwm4<0)
-		{
-			pwm4=abs(pwm4);
-			TIM_SetCompare2(TIM2,500-pwm4);//R_BIN2:������
-			R_BIN2_ON;
-		}	
 
 		memset(Smoothing_Pitch_Buf,0,sizeof(Smoothing_Pitch_Buf));
 		memset(Smoothing_Roll_Buf,0,sizeof(Smoothing_Roll_Buf));
