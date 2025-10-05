@@ -2,10 +2,10 @@
 #include "pwm.h"
 
 /**************************************************
-º¯ÊýÃû³Æ£ºMotor_PWM_Init(u32 arr,u32 psc)
-º¯Êý¹¦ÄÜ£ºµç»úPWMÊä³öº¯Êý
-Èë¿Ú²ÎÊý£ºarr ÖØ×°ÔØÖµ    psc   Ô¤·ÖÆµÏµÊý
-·µ»Ø²ÎÊý£ºÎÞ
+ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ£ï¿½Motor_PWM_Init(u32 arr,u32 psc)
+ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü£ï¿½ï¿½ï¿½ï¿½PWMï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+ï¿½ï¿½Ú²ï¿½ï¿½ï¿½ï¿½ï¿½arr ï¿½ï¿½×°ï¿½ï¿½Öµ    psc   Ô¤ï¿½ï¿½ÆµÏµï¿½ï¿½
+ï¿½ï¿½ï¿½Ø²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 ***************************************************/
 void Motor_PWM_Init(u32 arr,u32 psc)
 {
@@ -14,46 +14,46 @@ void Motor_PWM_Init(u32 arr,u32 psc)
 	TIM_OCInitTypeDef TIM_OCInitStructure;
 	
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE);
-	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2,ENABLE);     //¿ªÆô¶¨Ê±Æ÷2Ê±ÖÓ
+	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2,ENABLE);     //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½2Ê±ï¿½ï¿½
 	
 	
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0|GPIO_Pin_1|GPIO_Pin_2|GPIO_Pin_3;
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;			//ÆµÂÊ50ZMHZ
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;				//¸´ÓÃÍÆÍìÊä³ö
-	GPIO_Init(GPIOA, &GPIO_InitStructure);								//³õÊ¼»¯GPIOA
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;			//Æµï¿½ï¿½50ZMHZ
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;				//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	GPIO_Init(GPIOA, &GPIO_InitStructure);								//ï¿½ï¿½Ê¼ï¿½ï¿½GPIOA
 	
 	
-	TIM_InitStructure.TIM_Period=arr-1;                    //×Ô¶¯ÖØ×°ÔØ¼Ä´æÆ÷ÖÜÆÚµÄÖµ        
-	TIM_InitStructure.TIM_Prescaler=psc-1;                 //ÉèÖÃÔ¤·ÖÆµÖµ 
-	TIM_InitStructure.TIM_ClockDivision=TIM_CKD_DIV1;    //ÉèÖÃÊ±ÖÓ·Ö¸î:TDTS = Tck_tim
-	TIM_InitStructure.TIM_CounterMode=TIM_CounterMode_Up;//TIMÏòÉÏ¼ÆÊýÄ£Ê½
-	TIM_InitStructure.TIM_RepetitionCounter=0;           //ÖØ¸´¼ÆÊýµÄÖµ
+	TIM_InitStructure.TIM_Period=arr-1;                    //ï¿½Ô¶ï¿½ï¿½ï¿½×°ï¿½Ø¼Ä´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½Öµ        
+	TIM_InitStructure.TIM_Prescaler=psc-1;                 //ï¿½ï¿½ï¿½ï¿½Ô¤ï¿½ï¿½ÆµÖµ 
+	TIM_InitStructure.TIM_ClockDivision=TIM_CKD_DIV1;    //ï¿½ï¿½ï¿½ï¿½Ê±ï¿½Ó·Ö¸ï¿½:TDTS = Tck_tim
+	TIM_InitStructure.TIM_CounterMode=TIM_CounterMode_Up;//TIMï¿½ï¿½ï¿½Ï¼ï¿½ï¿½ï¿½Ä£Ê½
+	TIM_InitStructure.TIM_RepetitionCounter=0;           //ï¿½Ø¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Öµ
 	
 	TIM_TimeBaseInit(TIM2,&TIM_InitStructure);
-	TIM_Cmd(TIM2, ENABLE);                               //Ê¹ÄÜ¼ÆÊýÆ÷
+	TIM_Cmd(TIM2, ENABLE);                               //Ê¹ï¿½Ü¼ï¿½ï¿½ï¿½ï¿½ï¿½
 	
-	TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_PWM1; //Ñ¡Ôñ¶¨Ê±Æ÷Ä£Ê½:TIMÂö³å¿í¶Èµ÷ÖÆÄ£Ê½2
- 	TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable; //±È½ÏÊä³öÊ¹ÄÜ
-	TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_High; //Êä³ö¼«ÐÔ:TIMÊä³ö±È½Ï¼«ÐÔ¸ß
+	TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_PWM1; //Ñ¡ï¿½ï¿½Ê±ï¿½ï¿½Ä£Ê½:TIMï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Èµï¿½ï¿½ï¿½Ä£Ê½2
+ 	TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable; //ï¿½È½ï¿½ï¿½ï¿½ï¿½Ê¹ï¿½ï¿½
+	TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_High; //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½:TIMï¿½ï¿½ï¿½ï¿½È½Ï¼ï¿½ï¿½Ô¸ï¿½
 	
-	TIM_OC1Init(TIM2, &TIM_OCInitStructure);  //³õÊ¼»¯ÍâÉèTIM2 OC1
-	TIM_OC2Init(TIM2, &TIM_OCInitStructure);  //³õÊ¼»¯ÍâÉèTIM2 OC2
-	TIM_OC3Init(TIM2, &TIM_OCInitStructure);  //³õÊ¼»¯ÍâÉèTIM2 OC3
-	TIM_OC4Init(TIM2, &TIM_OCInitStructure);  //³õÊ¼»¯ÍâÉèTIM2 OC4
-	TIM_OC1PreloadConfig(TIM2, TIM_OCPreload_Enable);  //Ê¹ÄÜTIM2ÔÚCCR2ÉÏµÄÔ¤×°ÔØ¼Ä´æÆ÷
-	TIM_OC2PreloadConfig(TIM2, TIM_OCPreload_Enable);  //Ê¹ÄÜTIM2ÔÚCCR2ÉÏµÄÔ¤×°ÔØ¼Ä´æÆ÷
-	TIM_OC3PreloadConfig(TIM2, TIM_OCPreload_Enable);  //Ê¹ÄÜTIM2ÔÚCCR2ÉÏµÄÔ¤×°ÔØ¼Ä´æÆ÷
-	TIM_OC4PreloadConfig(TIM2, TIM_OCPreload_Enable);  //Ê¹ÄÜTIM2ÔÚCCR2ÉÏµÄÔ¤×°ÔØ¼Ä´æÆ÷
+	TIM_OC1Init(TIM2, &TIM_OCInitStructure);  //ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½TIM2 OC1
+	TIM_OC2Init(TIM2, &TIM_OCInitStructure);  //ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½TIM2 OC2
+	TIM_OC3Init(TIM2, &TIM_OCInitStructure);  //ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½TIM2 OC3
+	TIM_OC4Init(TIM2, &TIM_OCInitStructure);  //ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½TIM2 OC4
+	TIM_OC1PreloadConfig(TIM2, TIM_OCPreload_Enable);  //Ê¹ï¿½ï¿½TIM2ï¿½ï¿½CCR2ï¿½Ïµï¿½Ô¤×°ï¿½Ø¼Ä´ï¿½ï¿½ï¿½
+	TIM_OC2PreloadConfig(TIM2, TIM_OCPreload_Enable);  //Ê¹ï¿½ï¿½TIM2ï¿½ï¿½CCR2ï¿½Ïµï¿½Ô¤×°ï¿½Ø¼Ä´ï¿½ï¿½ï¿½
+	TIM_OC3PreloadConfig(TIM2, TIM_OCPreload_Enable);  //Ê¹ï¿½ï¿½TIM2ï¿½ï¿½CCR2ï¿½Ïµï¿½Ô¤×°ï¿½Ø¼Ä´ï¿½ï¿½ï¿½
+	TIM_OC4PreloadConfig(TIM2, TIM_OCPreload_Enable);  //Ê¹ï¿½ï¿½TIM2ï¿½ï¿½CCR2ï¿½Ïµï¿½Ô¤×°ï¿½Ø¼Ä´ï¿½ï¿½ï¿½
 	
 }
 
 
 
 /**************************************************
-º¯ÊýÃû³Æ£ºMotor_GPIO_Init(void)
-º¯Êý¹¦ÄÜ£ºµç»úGPIO³õÊ¼»¯º¯Êý
-Èë¿Ú²ÎÊý£ºÎÞ
-·µ»Ø²ÎÊý£ºÎÞ
+ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ£ï¿½Motor_GPIO_Init(void)
+ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü£ï¿½ï¿½ï¿½ï¿½GPIOï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+ï¿½ï¿½Ú²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+ï¿½ï¿½ï¿½Ø²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 ***************************************************/
 void Motor_GPIO_Init(void)
 {
@@ -61,29 +61,29 @@ void Motor_GPIO_Init(void)
 
 	// RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB,ENABLE);
 	// GPIO_InitStruct.GPIO_Pin = GPIO_Pin_5|GPIO_Pin_6|GPIO_Pin_7|GPIO_Pin_8;
-	// GPIO_InitStruct.GPIO_Mode = GPIO_Mode_Out_PP;//ÍÆÍìÊä³ö
+	// GPIO_InitStruct.GPIO_Mode = GPIO_Mode_Out_PP;//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	// GPIO_InitStruct.GPIO_Speed = GPIO_Speed_50MHz;
 	
 	// GPIO_Init(GPIOB,&GPIO_InitStruct);
 	
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA | RCC_APB2Periph_GPIOB, ENABLE);
-    // ³õÊ¼»¯ GPIOA µÄ PA0~PA3
+    // ï¿½ï¿½Ê¼ï¿½ï¿½ GPIOA ï¿½ï¿½ PA0~PA3
     GPIO_InitStruct.GPIO_Pin = GPIO_Pin_0 | GPIO_Pin_1 | GPIO_Pin_2 | GPIO_Pin_3;
-    GPIO_InitStruct.GPIO_Mode = GPIO_Mode_Out_PP; // ÍÆÍìÊä³ö
+    GPIO_InitStruct.GPIO_Mode = GPIO_Mode_Out_PP; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     GPIO_InitStruct.GPIO_Speed = GPIO_Speed_50MHz;
     GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-    // ³õÊ¼»¯ GPIOB µÄ PB5~PB8
+    // ï¿½ï¿½Ê¼ï¿½ï¿½ GPIOB ï¿½ï¿½ PB5~PB8
     GPIO_InitStruct.GPIO_Pin = GPIO_Pin_5 | GPIO_Pin_6 | GPIO_Pin_7 | GPIO_Pin_8;
     GPIO_Init(GPIOB, &GPIO_InitStruct);
 
-    // Ä¬ÈÏÏÈ¹Ø±ÕËùÓÐµç»úÊä³ö£¨·ÀÖ¹ÉÏµçÂÒ×ª£©
+    // Ä¬ï¿½ï¿½ï¿½È¹Ø±ï¿½ï¿½ï¿½ï¿½Ðµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¹ï¿½Ïµï¿½ï¿½ï¿½×ªï¿½ï¿½
     GPIO_ResetBits(GPIOA, GPIO_Pin_0 | GPIO_Pin_1 | GPIO_Pin_2 | GPIO_Pin_3);
     GPIO_ResetBits(GPIOB, GPIO_Pin_5 | GPIO_Pin_6 | GPIO_Pin_7 | GPIO_Pin_8);
-	    // -------- PWM Êä³öÒý½Å --------
+	    // -------- PWM ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ --------
     // PA6 (TIM3_CH1), PA7 (TIM3_CH2)
     GPIO_InitStruct.GPIO_Pin = GPIO_Pin_6 | GPIO_Pin_7;
-    GPIO_InitStruct.GPIO_Mode = GPIO_Mode_AF_PP;   // ¸´ÓÃÍÆÍìÊä³ö
+    GPIO_InitStruct.GPIO_Mode = GPIO_Mode_AF_PP;   // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     GPIO_InitStruct.GPIO_Speed = GPIO_Speed_50MHz;
     GPIO_Init(GPIOA, &GPIO_InitStruct);
 
@@ -99,23 +99,23 @@ void Motor_TIM_Init(void)
     TIM_TimeBaseInitTypeDef TIM_TimeBaseInitStruct;
     TIM_OCInitTypeDef TIM_OCInitStruct;
 
-    // ¿ªÆô TIM3 Ê±ÖÓ
+    // ï¿½ï¿½ï¿½ï¿½ TIM3 Ê±ï¿½ï¿½
     RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM3, ENABLE);
 
-    // »ù±¾¶¨Ê±Æ÷ÅäÖÃ
-    TIM_TimeBaseInitStruct.TIM_Period = 999;              // ARR = 1000-1 -> 1000 ¸ö¼ÆÊý
-    TIM_TimeBaseInitStruct.TIM_Prescaler = 71;           // PSC = 72-1 -> 1MHz ¼ÆÊýÆµÂÊ
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    TIM_TimeBaseInitStruct.TIM_Period = 999;              // ARR = 1000-1 -> 1000 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    TIM_TimeBaseInitStruct.TIM_Prescaler = 71;           // PSC = 72-1 -> 1MHz ï¿½ï¿½ï¿½ï¿½Æµï¿½ï¿½
     TIM_TimeBaseInitStruct.TIM_ClockDivision = 0;
     TIM_TimeBaseInitStruct.TIM_CounterMode = TIM_CounterMode_Up;
     TIM_TimeBaseInit(TIM3, &TIM_TimeBaseInitStruct);
 
-    // PWM Ä£Ê½ÅäÖÃ
+    // PWM Ä£Ê½ï¿½ï¿½ï¿½ï¿½
     TIM_OCInitStruct.TIM_OCMode = TIM_OCMode_PWM1;       // PWM1 Ä£Ê½
     TIM_OCInitStruct.TIM_OutputState = TIM_OutputState_Enable;
     TIM_OCInitStruct.TIM_OCPolarity = TIM_OCPolarity_High;
 
     // CH1
-    TIM_OCInitStruct.TIM_Pulse = 0;   // ³õÊ¼Õ¼¿Õ±È 0
+    TIM_OCInitStruct.TIM_Pulse = 0;   // ï¿½ï¿½Ê¼Õ¼ï¿½Õ±ï¿½ 0
     TIM_OC1Init(TIM3, &TIM_OCInitStruct);
     TIM_OC1PreloadConfig(TIM3, TIM_OCPreload_Enable);
 
@@ -134,27 +134,27 @@ void Motor_TIM_Init(void)
     TIM_OC4Init(TIM3, &TIM_OCInitStruct);
     TIM_OC4PreloadConfig(TIM3, TIM_OCPreload_Enable);
 
-    // Ê¹ÄÜ TIM3
+    // Ê¹ï¿½ï¿½ TIM3
     TIM_ARRPreloadConfig(TIM3, ENABLE);
     TIM_Cmd(TIM3, ENABLE);
 }
 
 
 /**************************************************
-º¯ÊýÃû³Æ£ºSTBY_Init(void)
-º¯Êý¹¦ÄÜ£ºSTBY³õÊ¼»¯
-Èë¿Ú²ÎÊý£ºÎÞ
-·µ»Ø²ÎÊý£ºÎÞ
+ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ£ï¿½STBY_Init(void)
+ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü£ï¿½STBYï¿½ï¿½Ê¼ï¿½ï¿½
+ï¿½ï¿½Ú²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+ï¿½ï¿½ï¿½Ø²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 ***************************************************/
 void STBY_Init(void)
 {
 	GPIO_InitTypeDef	GPIO_InitStruct;
 
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB,ENABLE);
-	GPIO_PinRemapConfig(GPIO_Remap_SWJ_JTAGDisable, ENABLE);     //½ûÓÃJTAG
+	GPIO_PinRemapConfig(GPIO_Remap_SWJ_JTAGDisable, ENABLE);     //ï¿½ï¿½ï¿½ï¿½JTAG
 	
 	GPIO_InitStruct.GPIO_Pin = GPIO_Pin_4|GPIO_Pin_9;
-	GPIO_InitStruct.GPIO_Mode = GPIO_Mode_Out_PP;//ÍÆÍìÊä³ö
+	GPIO_InitStruct.GPIO_Mode = GPIO_Mode_Out_PP;//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	GPIO_InitStruct.GPIO_Speed = GPIO_Speed_50MHz;
 	
 	GPIO_Init(GPIOB,&GPIO_InitStruct);
@@ -163,10 +163,10 @@ void STBY_Init(void)
 }
 
 /**************************************************
-º¯ÊýÃû³Æ£ºMotor_Init(void)
-º¯Êý¹¦ÄÜ£ºµç»úÏà¹ØÒý½Å³õÊ¼»¯
-Èë¿Ú²ÎÊý£ºÎÞ
-·µ»Ø²ÎÊý£ºÎÞ
+ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ£ï¿½Motor_Init(void)
+ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å³ï¿½Ê¼ï¿½ï¿½
+ï¿½ï¿½Ú²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+ï¿½ï¿½ï¿½Ø²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 ***************************************************/
 
 
@@ -176,35 +176,35 @@ void mach_config(void)
     TIM_TimeBaseInitTypeDef TIM_INIT;
     TIM_OCInitTypeDef TIM_OCINIT;
 
-    // Ê¹ÄÜ GPIO ºÍ TIM Ê±ÖÓ
+    // Ê¹ï¿½ï¿½ GPIO ï¿½ï¿½ TIM Ê±ï¿½ï¿½
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA | RCC_APB2Periph_GPIOB, ENABLE);
     RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM3 | RCC_APB1Periph_TIM4, ENABLE);
 
-    // ----------------- GPIO ÅäÖÃ -----------------
-    // TIM4_CH1~4 ¡ú PB6,7,8,9
+    // ----------------- GPIO ï¿½ï¿½ï¿½ï¿½ -----------------
+    // TIM4_CH1~4 ï¿½ï¿½ PB6,7,8,9
     GPIO_INIT.GPIO_Mode  = GPIO_Mode_AF_PP;
     GPIO_INIT.GPIO_Speed = GPIO_Speed_50MHz;
     GPIO_INIT.GPIO_Pin   = GPIO_Pin_6 | GPIO_Pin_7 | GPIO_Pin_8 | GPIO_Pin_9;
     GPIO_Init(GPIOB, &GPIO_INIT);
 
-    // TIM3_CH1~4 ¡ú PA6,7 + PB0,1
+    // TIM3_CH1~4 ï¿½ï¿½ PA6,7 + PB0,1
     GPIO_INIT.GPIO_Pin   = GPIO_Pin_6 | GPIO_Pin_7;
     GPIO_Init(GPIOA, &GPIO_INIT);
 
     GPIO_INIT.GPIO_Pin   = GPIO_Pin_0 | GPIO_Pin_1;
     GPIO_Init(GPIOB, &GPIO_INIT);
 
-    // ----------------- TIM4 ÅäÖÃ -----------------
-    TIM_INIT.TIM_Period = 999;               // ×Ô¶¯ÖØ×°Öµ ¡ú PWMÆµÂÊ
+    // ----------------- TIM4 ï¿½ï¿½ï¿½ï¿½ -----------------
+    TIM_INIT.TIM_Period = 999;               // ï¿½Ô¶ï¿½ï¿½ï¿½×°Öµ ï¿½ï¿½ PWMÆµï¿½ï¿½
     TIM_INIT.TIM_Prescaler = 71;             // 72MHz / (71+1) = 1MHz
     TIM_INIT.TIM_ClockDivision = TIM_CKD_DIV1;
     TIM_INIT.TIM_CounterMode = TIM_CounterMode_Up;
     TIM_TimeBaseInit(TIM4, &TIM_INIT);
 
-    // ----------------- TIM3 ÅäÖÃ -----------------
+    // ----------------- TIM3 ï¿½ï¿½ï¿½ï¿½ -----------------
     TIM_TimeBaseInit(TIM3, &TIM_INIT);
 
-    // ----------------- PWM Êä³öÅäÖÃ -----------------
+    // ----------------- PWM ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ -----------------
     TIM_OCINIT.TIM_OCMode = TIM_OCMode_PWM1;
     TIM_OCINIT.TIM_OutputState = TIM_OutputState_Enable;
     TIM_OCINIT.TIM_OCPolarity = TIM_OCPolarity_High;
@@ -221,7 +221,7 @@ void mach_config(void)
     TIM_OC3Init(TIM3, &TIM_OCINIT);
     TIM_OC4Init(TIM3, &TIM_OCINIT);
 
-    // Ê¹ÄÜ¶¨Ê±Æ÷
+    // Ê¹ï¿½Ü¶ï¿½Ê±ï¿½ï¿½
     TIM_Cmd(TIM4, ENABLE);
     TIM_Cmd(TIM3, ENABLE);
 }
@@ -248,14 +248,14 @@ void Motor_SetLeftSpeed(int16_t speed)
 {
 	if (speed > 0)
 	{
-		GPIO_SetBits(GPIOA, GPIO_Pin_5);
-		GPIO_ResetBits(GPIOA, GPIO_Pin_4);
+		GPIO_SetBits(GPIOA, GPIO_Pin_4);
+		GPIO_ResetBits(GPIOA, GPIO_Pin_5);
 		TIM_SetCompare3(TIM2, speed);
 	}
 	else if (speed < 0)
 	{
-		GPIO_SetBits(GPIOA, GPIO_Pin_4);
-		GPIO_ResetBits(GPIOA, GPIO_Pin_5);
+		GPIO_SetBits(GPIOA, GPIO_Pin_5);
+		GPIO_ResetBits(GPIOA, GPIO_Pin_4);
 		TIM_SetCompare3(TIM2, -speed);
 	}
 	else
@@ -270,14 +270,14 @@ void Motor_SetRightSpeed(int16_t speed)
 {
 	if (speed > 0)
 	{
-		GPIO_SetBits(GPIOA, GPIO_Pin_7);
-		GPIO_ResetBits(GPIOA, GPIO_Pin_6);
+		GPIO_SetBits(GPIOA, GPIO_Pin_6);
+		GPIO_ResetBits(GPIOA, GPIO_Pin_7);
 		TIM_SetCompare4(TIM2, speed);
 	}
 	else if (speed < 0)
 	{
-		GPIO_SetBits(GPIOA, GPIO_Pin_6);
-		GPIO_ResetBits(GPIOA, GPIO_Pin_7);
+		GPIO_SetBits(GPIOA, GPIO_Pin_7);
+		GPIO_ResetBits(GPIOA, GPIO_Pin_6);
 		TIM_SetCompare4(TIM2, -speed);
 	}
 	else
@@ -287,194 +287,194 @@ void Motor_SetRightSpeed(int16_t speed)
 	}
 }
 /**************************************************
-º¯ÊýÃû³Æ£ºforward(u16 speed)
-º¯Êý¹¦ÄÜ£ºÐ¡³µÇ°½ø
-Èë¿Ú²ÎÊý£ºspeed  0-500
-·µ»Ø²ÎÊý£ºÎÞ
+ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ£ï¿½forward(u16 speed)
+ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü£ï¿½Ð¡ï¿½ï¿½Ç°ï¿½ï¿½
+ï¿½ï¿½Ú²ï¿½ï¿½ï¿½ï¿½ï¿½speed  0-500
+ï¿½ï¿½ï¿½Ø²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 ***************************************************/
 void forward(u16 speed)
 {
-	TIM_SetCompare1(TIM2,500-speed);//R_AIN2:ÓÒÏÂ
+	TIM_SetCompare1(TIM2,500-speed);//R_AIN2:ï¿½ï¿½ï¿½ï¿½
 	R_AIN2_ON;
 	
-	TIM_SetCompare2(TIM2,speed);//R_BIN2:×óÏÂ
+	TIM_SetCompare2(TIM2,speed);//R_BIN2:ï¿½ï¿½ï¿½ï¿½
 	R_BIN2_OFF;
 	
-	TIM_SetCompare3(TIM2,speed);//L_AIN2:ÓÒÉÏ
+	TIM_SetCompare3(TIM2,speed);//L_AIN2:ï¿½ï¿½ï¿½ï¿½
 	L_AIN2_OFF;
 	
-	TIM_SetCompare4(TIM2,500-speed);//L_BIN2:×óÉÏ
+	TIM_SetCompare4(TIM2,500-speed);//L_BIN2:ï¿½ï¿½ï¿½ï¿½
   L_BIN2_ON;
 }
 
 
 /**************************************************
-º¯ÊýÃû³Æ£ºbackward(u16 speed)
-º¯Êý¹¦ÄÜ£ºÐ¡³µºóÍË
-Èë¿Ú²ÎÊý£ºspeed  0-500
-·µ»Ø²ÎÊý£ºÎÞ
+ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ£ï¿½backward(u16 speed)
+ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü£ï¿½Ð¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+ï¿½ï¿½Ú²ï¿½ï¿½ï¿½ï¿½ï¿½speed  0-500
+ï¿½ï¿½ï¿½Ø²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 ***************************************************/
 void backward(u16 speed)
 {
-	TIM_SetCompare1(TIM2,speed);//R_AIN2:ÓÒÏÂ
+	TIM_SetCompare1(TIM2,speed);//R_AIN2:ï¿½ï¿½ï¿½ï¿½
 	R_AIN2_OFF;
 	
-	TIM_SetCompare2(TIM2,500-speed);//R_BIN2:×óÏÂ
+	TIM_SetCompare2(TIM2,500-speed);//R_BIN2:ï¿½ï¿½ï¿½ï¿½
 	R_BIN2_ON;
 	
-	TIM_SetCompare3(TIM2,500-speed);//L_AIN2:ÓÒÉÏ
+	TIM_SetCompare3(TIM2,500-speed);//L_AIN2:ï¿½ï¿½ï¿½ï¿½
 	L_AIN2_ON;
 	
-	TIM_SetCompare4(TIM2,speed);//L_BIN2:×óÉÏ
+	TIM_SetCompare4(TIM2,speed);//L_BIN2:ï¿½ï¿½ï¿½ï¿½
   L_BIN2_OFF;	
 }
 
 
 /**************************************************
-º¯ÊýÃû³Æ£ºLeft_Turn(u16 speed)
-º¯Êý¹¦ÄÜ£ºÐ¡³µ×ó×ª
-Èë¿Ú²ÎÊý£ºspeed  0-500
-·µ»Ø²ÎÊý£ºÎÞ
+ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ£ï¿½Left_Turn(u16 speed)
+ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü£ï¿½Ð¡ï¿½ï¿½ï¿½ï¿½×ª
+ï¿½ï¿½Ú²ï¿½ï¿½ï¿½ï¿½ï¿½speed  0-500
+ï¿½ï¿½ï¿½Ø²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 ***************************************************/
 void Left_Turn(u16 speed)
 {
-	TIM_SetCompare1(TIM2,500-speed);//R_AIN2:ÓÒÏÂ
+	TIM_SetCompare1(TIM2,500-speed);//R_AIN2:ï¿½ï¿½ï¿½ï¿½
 	R_AIN2_ON;
 	
-	TIM_SetCompare2(TIM2,500-speed);//R_BIN2:×óÏÂ
+	TIM_SetCompare2(TIM2,500-speed);//R_BIN2:ï¿½ï¿½ï¿½ï¿½
 	R_BIN2_ON;
 	
-	TIM_SetCompare3(TIM2,speed);//L_AIN2:ÓÒÉÏ
+	TIM_SetCompare3(TIM2,speed);//L_AIN2:ï¿½ï¿½ï¿½ï¿½
 	L_AIN2_OFF;
 	
-	TIM_SetCompare4(TIM2,speed);//L_BIN2:×óÉÏ
+	TIM_SetCompare4(TIM2,speed);//L_BIN2:ï¿½ï¿½ï¿½ï¿½
   L_BIN2_OFF;	
 }
 
 
 /**************************************************
-º¯ÊýÃû³Æ£ºRight_Turn(u16 speed)
-º¯Êý¹¦ÄÜ£ºÐ¡³µÓÒ×ª
-Èë¿Ú²ÎÊý£ºspeed  0-500
-·µ»Ø²ÎÊý£ºÎÞ
+ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ£ï¿½Right_Turn(u16 speed)
+ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü£ï¿½Ð¡ï¿½ï¿½ï¿½ï¿½×ª
+ï¿½ï¿½Ú²ï¿½ï¿½ï¿½ï¿½ï¿½speed  0-500
+ï¿½ï¿½ï¿½Ø²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 ***************************************************/
 void Right_Turn(u16 speed)
 {
-	TIM_SetCompare1(TIM2,speed);//R_AIN2:ÓÒÏÂ
+	TIM_SetCompare1(TIM2,speed);//R_AIN2:ï¿½ï¿½ï¿½ï¿½
 	R_AIN2_OFF;
 	
-	TIM_SetCompare2(TIM2,speed);//R_BIN2:×óÏÂ
+	TIM_SetCompare2(TIM2,speed);//R_BIN2:ï¿½ï¿½ï¿½ï¿½
 	R_BIN2_OFF;
 	
-	TIM_SetCompare3(TIM2,500-speed);//L_AIN2:ÓÒÉÏ
+	TIM_SetCompare3(TIM2,500-speed);//L_AIN2:ï¿½ï¿½ï¿½ï¿½
 	L_AIN2_ON;
 	
-	TIM_SetCompare4(TIM2,500-speed);//L_BIN2:×óÉÏ
+	TIM_SetCompare4(TIM2,500-speed);//L_BIN2:ï¿½ï¿½ï¿½ï¿½
   L_BIN2_ON;	
 }
 
 
 /************************************************************************
-º¯ÊýÃû³Æ£ºMove(u16 Dir,u16 speed)
-º¯Êý¹¦ÄÜ£ºÐ¡³µÆ½ÒÆ
-Èë¿Ú²ÎÊý£ºDir Æ½ÒÆ·½Ïò(L_Move R_Move L_U_Move L_D_Move R_U_Move L_D_Move)
-					·½Ïò speed  0-500
-·µ»Ø²ÎÊý£ºÎÞ
+ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ£ï¿½Move(u16 Dir,u16 speed)
+ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü£ï¿½Ð¡ï¿½ï¿½Æ½ï¿½ï¿½
+ï¿½ï¿½Ú²ï¿½ï¿½ï¿½ï¿½ï¿½Dir Æ½ï¿½Æ·ï¿½ï¿½ï¿½(L_Move R_Move L_U_Move L_D_Move R_U_Move L_D_Move)
+					ï¿½ï¿½ï¿½ï¿½ speed  0-500
+ï¿½ï¿½ï¿½Ø²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 *********************************************************&&*************/
 void Move(u16 Dir,u16 speed)
 {
-	if(Dir==0)//×óÒÆ
+	if(Dir==0)//ï¿½ï¿½ï¿½ï¿½
 	{
-		TIM_SetCompare1(TIM2,speed);//R_AIN2:ÓÒÏÂ
+		TIM_SetCompare1(TIM2,speed);//R_AIN2:ï¿½ï¿½ï¿½ï¿½
 		R_AIN2_OFF;
 	
-		TIM_SetCompare2(TIM2,speed);//R_BIN2:×óÏÂ
+		TIM_SetCompare2(TIM2,speed);//R_BIN2:ï¿½ï¿½ï¿½ï¿½
 		R_BIN2_OFF;
 	
-		TIM_SetCompare3(TIM2,speed);//L_AIN2:ÓÒÉÏ
+		TIM_SetCompare3(TIM2,speed);//L_AIN2:ï¿½ï¿½ï¿½ï¿½
 		L_AIN2_OFF;
 	
-		TIM_SetCompare4(TIM2,speed);//L_BIN2:×óÉÏ
+		TIM_SetCompare4(TIM2,speed);//L_BIN2:ï¿½ï¿½ï¿½ï¿½
 		L_BIN2_OFF;
 	}
-	else if(Dir==1)//ÓÒÒÆ
+	else if(Dir==1)//ï¿½ï¿½ï¿½ï¿½
 	{
-		TIM_SetCompare1(TIM2,500-speed);//R_AIN2:ÓÒÏÂ
+		TIM_SetCompare1(TIM2,500-speed);//R_AIN2:ï¿½ï¿½ï¿½ï¿½
 		R_AIN2_ON;
 	
-		TIM_SetCompare2(TIM2,500-speed);//R_BIN2:×óÏÂ
+		TIM_SetCompare2(TIM2,500-speed);//R_BIN2:ï¿½ï¿½ï¿½ï¿½
 		R_BIN2_ON;
 	
-		TIM_SetCompare3(TIM2,500-speed);//L_AIN2:ÓÒÉÏ
+		TIM_SetCompare3(TIM2,500-speed);//L_AIN2:ï¿½ï¿½ï¿½ï¿½
 		L_AIN2_ON;
 	
-		TIM_SetCompare4(TIM2,500-speed);//L_BIN2:×óÉÏ
+		TIM_SetCompare4(TIM2,500-speed);//L_BIN2:ï¿½ï¿½ï¿½ï¿½
 		L_BIN2_ON;
 	}
-	else if(Dir==2)//×óÉÏÒÆ¶¯
+	else if(Dir==2)//ï¿½ï¿½ï¿½ï¿½ï¿½Æ¶ï¿½
 	{
-		TIM_SetCompare1(TIM2,500-speed);//R_AIN2:ÓÒÏÂ
+		TIM_SetCompare1(TIM2,500-speed);//R_AIN2:ï¿½ï¿½ï¿½ï¿½
 		R_AIN2_OFF;
 		
-		TIM_SetCompare2(TIM2,speed);//R_BIN2:×óÏÂ
+		TIM_SetCompare2(TIM2,speed);//R_BIN2:ï¿½ï¿½ï¿½ï¿½
 		R_BIN2_OFF;
 		
-		TIM_SetCompare3(TIM2,speed);//L_AIN2:ÓÒÉÏ
+		TIM_SetCompare3(TIM2,speed);//L_AIN2:ï¿½ï¿½ï¿½ï¿½
 		L_AIN2_OFF;
 		
-		TIM_SetCompare4(TIM2,500-speed);//L_BIN2:×óÉÏ
+		TIM_SetCompare4(TIM2,500-speed);//L_BIN2:ï¿½ï¿½ï¿½ï¿½
 		L_BIN2_OFF;
 	}
-	else if(Dir==3)//ÓÒÉÏÒÆ¶¯
+	else if(Dir==3)//ï¿½ï¿½ï¿½ï¿½ï¿½Æ¶ï¿½
 	{
-		TIM_SetCompare1(TIM2,500-speed);//R_AIN2:ÓÒÏÂ
+		TIM_SetCompare1(TIM2,500-speed);//R_AIN2:ï¿½ï¿½ï¿½ï¿½
 		R_AIN2_ON;
 		
-		TIM_SetCompare2(TIM2,speed);//R_BIN2:×óÏÂ
+		TIM_SetCompare2(TIM2,speed);//R_BIN2:ï¿½ï¿½ï¿½ï¿½
 		R_BIN2_ON;
 		
-		TIM_SetCompare3(TIM2,speed);//L_AIN2:ÓÒÉÏ
+		TIM_SetCompare3(TIM2,speed);//L_AIN2:ï¿½ï¿½ï¿½ï¿½
 		L_AIN2_ON;
 		
-		TIM_SetCompare4(TIM2,500-speed);//L_BIN2:×óÉÏ
+		TIM_SetCompare4(TIM2,500-speed);//L_BIN2:ï¿½ï¿½ï¿½ï¿½
 		L_BIN2_ON;
 	}
-	else if(Dir==4)//×óÏÂÒÆ¶¯
+	else if(Dir==4)//ï¿½ï¿½ï¿½ï¿½ï¿½Æ¶ï¿½
 	{
-		TIM_SetCompare1(TIM2,500-speed);//R_AIN2:ÓÒÏÂ
+		TIM_SetCompare1(TIM2,500-speed);//R_AIN2:ï¿½ï¿½ï¿½ï¿½
 		R_AIN2_OFF;
 		
-		TIM_SetCompare2(TIM2,500-speed);//R_BIN2:×óÏÂ
+		TIM_SetCompare2(TIM2,500-speed);//R_BIN2:ï¿½ï¿½ï¿½ï¿½
 		R_BIN2_ON;
 		
-		TIM_SetCompare3(TIM2,500-speed);//L_AIN2:ÓÒÉÏ
+		TIM_SetCompare3(TIM2,500-speed);//L_AIN2:ï¿½ï¿½ï¿½ï¿½
 		L_AIN2_ON;
 		
-		TIM_SetCompare4(TIM2,500-speed);//L_BIN2:×óÉÏ
+		TIM_SetCompare4(TIM2,500-speed);//L_BIN2:ï¿½ï¿½ï¿½ï¿½
 		L_BIN2_OFF;
 	}
-	else if(Dir==5)//ÓÒÏÂÒÆ¶¯
+	else if(Dir==5)//ï¿½ï¿½ï¿½ï¿½ï¿½Æ¶ï¿½
 	{
-		TIM_SetCompare1(TIM2,speed);//R_AIN2:ÓÒÏÂ
+		TIM_SetCompare1(TIM2,speed);//R_AIN2:ï¿½ï¿½ï¿½ï¿½
 		R_AIN2_OFF;
 		
-		TIM_SetCompare2(TIM2,speed);//R_BIN2:×óÏÂ
+		TIM_SetCompare2(TIM2,speed);//R_BIN2:ï¿½ï¿½ï¿½ï¿½
 		R_BIN2_ON;
 		
-		TIM_SetCompare3(TIM2,speed);//L_AIN2:ÓÒÉÏ
+		TIM_SetCompare3(TIM2,speed);//L_AIN2:ï¿½ï¿½ï¿½ï¿½
 		L_AIN2_ON;
 		
-		TIM_SetCompare4(TIM2,speed);//L_BIN2:×óÉÏ
+		TIM_SetCompare4(TIM2,speed);//L_BIN2:ï¿½ï¿½ï¿½ï¿½
 		L_BIN2_OFF;
 	}
 }
 
 
 /**************************************************
-º¯ÊýÃû³Æ£ºMotion_State(u16 mode)
-º¯Êý¹¦ÄÜ£ºÐ¡³µ¹Ø±Õ¼°´ò¿ª
-Èë¿Ú²ÎÊý£ºmode (ON OFF)
-·µ»Ø²ÎÊý£ºÎÞ
+ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ£ï¿½Motion_State(u16 mode)
+ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü£ï¿½Ð¡ï¿½ï¿½ï¿½Ø±Õ¼ï¿½ï¿½ï¿½
+ï¿½ï¿½Ú²ï¿½ï¿½ï¿½ï¿½ï¿½mode (ON OFF)
+ï¿½ï¿½ï¿½Ø²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 ***************************************************/
 void Motion_State(u16 mode)
 {
@@ -482,16 +482,16 @@ void Motion_State(u16 mode)
 	{
 		L_STBY_ON;
 		R_STBY_ON;
-		TIM_SetCompare1(TIM2,500);//R_AIN2:ÓÒÏÂ
+		TIM_SetCompare1(TIM2,500);//R_AIN2:ï¿½ï¿½ï¿½ï¿½
 		R_AIN2_ON;
 		
-		TIM_SetCompare2(TIM2,0);//R_BIN2:×óÏÂ
+		TIM_SetCompare2(TIM2,0);//R_BIN2:ï¿½ï¿½ï¿½ï¿½
 		R_BIN2_OFF;
 		
-		TIM_SetCompare3(TIM2,0);//L_AIN2:ÓÒÉÏ
+		TIM_SetCompare3(TIM2,0);//L_AIN2:ï¿½ï¿½ï¿½ï¿½
 		L_AIN2_OFF;
 		
-		TIM_SetCompare4(TIM2,500);//L_BIN2:×óÉÏ
+		TIM_SetCompare4(TIM2,500);//L_BIN2:ï¿½ï¿½ï¿½ï¿½
 		L_BIN2_ON;
 	}
 	else if(mode==7)

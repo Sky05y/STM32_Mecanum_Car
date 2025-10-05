@@ -44,3 +44,4 @@
 ..\obj\main.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\math.h
 ..\obj\main.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 ..\obj\main.o: ..\APP\WS2812B\ws2812b.h
+..\obj\main.o: track.h

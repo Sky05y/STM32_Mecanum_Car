@@ -64,8 +64,57 @@ void Bluetooth_Mode(void)
 		APP_Joy_Mode();
 	else if(mode_flag==2)
 		APP_Gravity_Mode();
+	else if(mode_flag==3)
+		Infrared_Mode();
+
 }
 
+void Infrared_Mode(void)
+{
+	uint8_t s7 = GPIO_ReadInputDataBit(GPIOB, GPIO_Pin_7);
+    uint8_t s6 = GPIO_ReadInputDataBit(GPIOB, GPIO_Pin_6);
+    uint8_t s15 = GPIO_ReadInputDataBit(GPIOB, GPIO_Pin_15);
+    uint8_t s8 = GPIO_ReadInputDataBit(GPIOB, GPIO_Pin_8);
+	// 1为检测到黑线
+    if(s7==1 && s6==1 && s15==1 && s8==1) {
+        // 全黑：停车（终点或交叉口）
+        Motor_SetLeftSpeed(0);
+        Motor_SetRightSpeed(0);
+		mode_flag = 1;
+    }
+    else if(s7==0 && s6==0 && s15==0 && s8==0)
+    {
+        // 全白：在轨道中间，直行
+        Motor_SetLeftSpeed(-50);
+        Motor_SetRightSpeed(-50);
+    }
+	    // ======== 偏左 / 偏右修正 ========
+    // 稍偏左（左边检测到黑线）
+    else if(s6==1 && s15==0)
+    {
+        Motor_SetLeftSpeed(-30);
+        Motor_SetRightSpeed(-60);
+    }
+    // 稍偏右（右边检测到黑线）
+    else if(s6==0 && s15==1)
+    {
+        Motor_SetLeftSpeed(-60);
+        Motor_SetRightSpeed(-30);
+    }
+    // 偏左很多（最左检测到黑线）
+    else if(s7==1)
+    {
+        Motor_SetLeftSpeed(-10);
+        Motor_SetRightSpeed(-70);
+    }
+    // 偏右很多（最右检测到黑线）
+    else if(s8==1)
+    {
+        Motor_SetLeftSpeed(-70);
+        Motor_SetRightSpeed(-10);
+    }
+
+}
 /**************************************************
 �������ƣ�Wireless_Mode(void)
 �������ܣ�ң��ģʽ
@@ -608,8 +657,8 @@ void APP_Joy_Mode(void)
 		Map_Lx = -Map_Lx; //Y轴负方向时，X取反，确保倒车顺序正确
 	}
 
-	speed_l = Map_Ly + Map_Lx;
-	speed_r = Map_Ly - Map_Lx;
+	speed_l = Map_Ly - Map_Lx;
+	speed_r = Map_Ly + Map_Lx;
 
 
 	if (speed_l < 15 && speed_l >-15)speed_l = 0;
@@ -621,8 +670,8 @@ void APP_Joy_Mode(void)
 	}
 	else
 	{
-		Motor_SetLeftSpeed(Map_Rx);
-		Motor_SetRightSpeed(-Map_Rx);
+		Motor_SetLeftSpeed(-Map_Rx);
+		Motor_SetRightSpeed(Map_Rx);
 	}
 	delay_ms(40);
 
@@ -637,7 +686,6 @@ void APP_Gravity_Mode(void)
 	int Pitch_symbel=1,Roll_symbel=1; // Pitch/Roll 符号位（+1 正，-1 负）
 	char Pitch_Buf[10],Roll_Buf[10]; // 存放提取出来的 Pitch / Roll 字符串
 	int Map_pitch, Map_roll; // 映射后的 Pitch / Roll
-	int pwm1, pwm2, pwm3, pwm4; // 四个电机的 PWM 值
 	static int Smoothing_Pitch_Buf[5]; // 中值滤波缓存（Pitch）
 	static int Smoothing_Roll_Buf[5]; // 中值滤波缓存（Roll）
 	static int Smoothing_Count=0; // 中值滤波采样计数
@@ -741,8 +789,8 @@ void APP_Gravity_Mode(void)
 		
 		if(Map_pitch > 0) Map_roll = -Map_roll; // 前进时，Pitch 取反，确保倒车顺序正确
 		
-		int speed_left  = Map_pitch + Map_roll;
-		int speed_right = Map_pitch - Map_roll;
+		int speed_left  = Map_pitch - Map_roll;
+		int speed_right = Map_pitch + Map_roll;
 		
 		if(abs(speed_left) < 20)speed_left = 0;
 		
@@ -751,26 +799,26 @@ void APP_Gravity_Mode(void)
 		// 左边两个电机 → PWMA
 		if(speed_left >= 0) 
 		{
-			GPIO_SetBits(GPIOA, GPIO_Pin_5);
-			GPIO_ResetBits(GPIOA, GPIO_Pin_4);
+			GPIO_SetBits(GPIOA, GPIO_Pin_4);
+			GPIO_ResetBits(GPIOA, GPIO_Pin_5);
 			TIM_SetCompare3(TIM2, speed_left);   // PA2 → PWMA
 		} else 
 		{
-			GPIO_SetBits(GPIOA, GPIO_Pin_4);
-			GPIO_ResetBits(GPIOA, GPIO_Pin_5);
+			GPIO_SetBits(GPIOA, GPIO_Pin_5);
+			GPIO_ResetBits(GPIOA, GPIO_Pin_4);
 			TIM_SetCompare3(TIM2, -speed_left);
 		}
 
 		// 右边两个电机 → PWMB
 		if(speed_right >= 0) 
 		{
-			GPIO_SetBits(GPIOA, GPIO_Pin_7);
-			GPIO_ResetBits(GPIOA, GPIO_Pin_6);
+			GPIO_SetBits(GPIOA, GPIO_Pin_6);
+			GPIO_ResetBits(GPIOA, GPIO_Pin_7);
 			TIM_SetCompare4(TIM2, speed_right);  // PA3 → PWMB
 		} else 
 		{
-			GPIO_SetBits(GPIOA, GPIO_Pin_6);
-			GPIO_ResetBits(GPIOA, GPIO_Pin_7);
+			GPIO_SetBits(GPIOA, GPIO_Pin_7);
+			GPIO_ResetBits(GPIOA, GPIO_Pin_6);
 			TIM_SetCompare4(TIM2, -speed_right);
 		}
 

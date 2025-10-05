@@ -660,6 +660,16 @@
               <FileType>5</FileType>
               <FilePath>..\HARDWARE\SPI\spi.h</FilePath>
             </File>
+            <File>
+              <FileName>track.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\track.c</FilePath>
+            </File>
+            <File>
+              <FileName>track.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\track.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

@@ -38,6 +38,7 @@
 "..\obj\dma.o"
 "..\obj\iic.o"
 "..\obj\spi.o"
+"..\obj\track.o"
 "..\obj\key.o"
 "..\obj\oled.o"
 "..\obj\mpu6050.o"

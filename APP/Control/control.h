@@ -52,7 +52,7 @@ void RGB_Select(void);
 void RGB_Show(void);
 void Control(void);
 void my_Mode(void);
-		 				    
+void Infrared_Mode(void);		 				    
 #endif
 
 
