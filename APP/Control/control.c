@@ -1,5 +1,6 @@
 #include "control.h"
 #include "motor.h"
+#include "gear.h"
 u8 Joy_RxBuf[20];//ҡ�˽������ݻ�����
 u8 MPU_RxBuf[10];//�����ǽ������ݻ�����
 u8 Joy_Lpos,Joy_Rpos;//ҡ����������
@@ -66,6 +67,18 @@ void Bluetooth_Mode(void)
 		APP_Gravity_Mode();
 	else if(mode_flag==3)
 		Infrared_Mode();
+	else if(mode_flag==4)
+	{
+		SG90_Set_Angle(0,1);  //占空比2.5%，0度
+		delay_ms(1000);
+		SG90_Set_Angle(90,2);
+		delay_ms(1000);
+		SG90_Set_Angle(90,2);  //占空比7.5%，90度
+		delay_ms(1000);
+		SG90_Set_Angle(90,3);  //占空比12.5%，180度
+		delay_ms(1000);
+		SG90_Set_Angle(0,3);
+	}
 
 }
 
@@ -502,7 +515,7 @@ void RGB_Select(void)
 		
 	}
 	delay_ms(10);
-	printf("RGB_mode=%d\n",RGB_mode);
+	// printf("RGB_mode=%d\n",RGB_mode);
 }
 
 /**************************************************

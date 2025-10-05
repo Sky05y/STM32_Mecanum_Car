@@ -38,6 +38,7 @@ DI:PB0
 #include "usart.h"
 #include "control.h"
 #include "track.h"
+#include "gear.h"
 int main(void)
 { 
     delay_init();           //延时函数初始化
@@ -50,7 +51,7 @@ int main(void)
     // Hcsr04_Init();//超声波初始化
     Motion_State(OFF);//关闭电机驱动失能
     Infrared_Init();//红外传感器初始化
-
+    SG90_PWM_Init(1999,719);//舵机0初始化
     // RGB_LED_Init();//RGB彩灯初始化
     delay_ms(1000);
     while(1)
