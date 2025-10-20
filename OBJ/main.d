@@ -46,3 +46,4 @@
 ..\obj\main.o: ..\APP\WS2812B\ws2812b.h
 ..\obj\main.o: track.h
 ..\obj\main.o: gear.h
+..\obj\main.o: music.h

@@ -52,6 +52,7 @@
 "..\obj\hcsr.o"
 "..\obj\control.o"
 "..\obj\ws2812b.o"
+"..\obj\music.o"
 "..\obj\malloc.o"
 --strict --scatter "..\OBJ\Mcar.sct"
 --summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols

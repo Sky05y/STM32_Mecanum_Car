@@ -33,25 +33,12 @@
 #define  GS_Mode 5
 #define  XJ_Mode 6
 
-
-extern u8 flag;
-extern float RGB_R,RGB_G,RGB_B;//HSVתRGB����ɫ
 extern char Pitch_Roll_Buf[20];
-
 
 int Map(int val,int in_min,int in_max,int out_min,int out_max);
 void APP_Joy_Mode(void);
 void APP_Gravity_Mode(void);
-
 void Bluetooth_Mode(void);
-void Wireless_Mode(void);
-void Evadible_Mode(void);
-void Gravity_Mode(void);
-void Follow_Mode(void);
-void RGB_Select(void);
-void RGB_Show(void);
-void Control(void);
-void my_Mode(void);
 void Infrared_Mode(void);		 				    
 #endif
 
